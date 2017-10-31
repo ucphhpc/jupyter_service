@@ -1,4 +1,4 @@
-FROM jupyterhub/jupyterhub:0.7.2
+FROM python:3.6
 
 MAINTAINER Rasmus Munk <rasmus.munk@nbi.ku.dk>
 
@@ -11,30 +11,27 @@ RUN apt-get update && apt-get install -y \
 
 # Juptyer and sshfs
 RUN pip3 install \
+    jupyterhub==0.7.2 \
     'notebook>=5.0,<=6.0'
 
-RUN pip3 install jupyterhub-dummyauthenticator
-# Install Swarm Spawner
-RUN git clone https://github.com/cassinyio/SwarmSpawner && \
-    cd SwarmSpawner && \
-    pip3 install -r requirements/base.txt && \
-    pip3 install -r requirements/tests.txt && \
-    touch README.rst && \
-    python3 setup.py install && \
-    cd ..
-
 ADD . /app
-RUN cd /app && \
+RUN cd /app/nbi_data_access && \
     pip3 install -r requirements.txt && \
     pip3 install -r tests/requirements.txt && \
     python3 setup.py install && \
     python3 setup.py test
 
+#
+EXPOSE 8888
+
+#ADD fix-permissions /usr/local/bin/fix-permissions
 # create a user, since we don't want to run as root
 RUN useradd -m jovyan
 ENV HOME=/home/jovyan
 WORKDIR $HOME
+
+COPY jupyter_notebook_config.py /etc/jupyter/
+
 # Run container as
 USER jovyan
-
 CMD ["jupyterhub-singleuser"]

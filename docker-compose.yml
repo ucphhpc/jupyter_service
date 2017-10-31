@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+  nginx:
+    image: 127.0.0.1:5000/nbi_nginx
+    build: ./nginx
+    links:
+        - jupyterhub:jupyterhub
+    ports:
+      - "80:80"
+      - "8888:8888"
+
+  jupyterhub:
+    image: 127.0.0.1:5000/nbi_jupyterhub
+    build: ./nbi_jupyterhub
+    environment:
+      - DOCKER_HOST=192.168.99.101:2376
+      - DOCKER_TLS_VERIFY=1
+      - DOCKER_CERT_PATH=/home/jovyan
+    volumes:
+      - type: bind
+        source: /Users/rasmusmunk/.docker/machine/machines/manager1
+        target: /home/jovyan
