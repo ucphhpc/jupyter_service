@@ -1,0 +1,3 @@
+[submodule "nbi_data_access"]
+	path = nbi_data_access
+	url = https://github.com/rasmunk/nbi_data_access.git
