@@ -7,7 +7,6 @@ services:
         - jupyterhub:jupyterhub
     ports:
       - "80:80"
-      - "8888:8888"
 
   jupyterhub:
     image: 127.0.0.1:5000/nbi_jupyterhub
