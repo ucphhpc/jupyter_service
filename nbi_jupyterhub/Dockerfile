@@ -4,8 +4,7 @@ FROM jupyterhub/jupyterhub:0.7.2
 
 MAINTAINER Rasmus Munk <rasmus.munk@nbi.ku.dk>
 
-RUN apt-get update
-RUN apt-get -y install python3-pip
+RUN apt-get update && apt-get -y install python3-pip
 # Temporary add these usful tools while developing
 RUN apt-get -y install vim less net-tools
 RUN useradd -ms /bin/bash jovyan

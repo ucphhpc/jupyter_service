@@ -17,33 +17,18 @@ c.SwarmSpawner.jupyterhub_service_name = 'nbibda_service_jupyterhub'
 
 c.SwarmSpawner.networks = ["nbibda_service_default"]
 
-#notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work'
-#c.SwarmSpawner.notebook_dir = notebook_dir
-
-# Need to over-ride the default in SwarmSpawner, as that's Notebook 4
-# Image needs to be previously pulled
-#c.SwarmSpawner.service_image = 'python:3.6'
-
-#mounts = [{'type': 'volume',
-#           'source': 'jupyterhub-user-{username}',
- #          'target': notebook_dir}]
-
-#print("Token: " + str(c.SwarmSpawner.get_env()['JUPYTERHUB_API_TOKEN']))
-#print("Client ID " + str(c.SwarmSpawner.get_env()['JUPYTERHUB_CLIENT_ID']))
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh'],
-    #'args': ['jupyterhub-singleuser', '--config=/etc/jupyter/jupyter_notebook_config.py'],
     # image needs to be previously pulled
     'Image': '127.0.0.1:5000/nbi_jupyter_notebook',
-    #'Image': "127.0.0.1:5000/singleuser",
     'mounts': []
 }
 
 # The values here are too low for our OpenStack system
-#c.SwarmSpawner.resource_spec = {
-    #                'cpu_limit' : 1000000,
-    #                'mem_limit' : int(512 * 1e6),
-    #                'cpu_reservation' : 1000000,
-    #                'mem_reservation' : int(512 * 1e6),
-#}
+c.SwarmSpawner.resource_spec = {
+    'cpu_limit': 1000000,
+    'mem_limit': int(512 * 1e6),
+    'cpu_reservation': 1000000,
+    'mem_reservation': int(512 * 1e6),
+}
