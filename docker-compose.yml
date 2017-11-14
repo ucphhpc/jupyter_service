@@ -12,10 +12,10 @@ services:
     image: 127.0.0.1:5000/nbi_jupyterhub
     build: ./nbi_jupyterhub
     environment:
-      - DOCKER_HOST=192.168.99.101:2376
+      - DOCKER_HOST=bda.erda.dk:2376
       - DOCKER_TLS_VERIFY=1
-      - DOCKER_CERT_PATH=/home/jovyan
+      - DOCKER_CERT_PATH=/etc/docker/certs
     volumes:
       - type: bind
-        source: /Users/rasmusmunk/.docker/machine/machines/manager1
-        target: /home/jovyan
+        source: ~/.docker/
+        target: /etc/docker/certs

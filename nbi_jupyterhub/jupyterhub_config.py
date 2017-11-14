@@ -26,9 +26,9 @@ c.SwarmSpawner.container_spec = {
 }
 
 # The values here are too low for our OpenStack system
-c.SwarmSpawner.resource_spec = {
-    'cpu_limit': 1000000,
-    'mem_limit': int(512 * 1e6),
-    'cpu_reservation': 1000000,
-    'mem_reservation': int(512 * 1e6),
-}
+#c.SwarmSpawner.resource_spec = {
+#    'cpu_limit': 1000000,
+#    'mem_limit': int(512 * 1e6),
+#    'cpu_reservation': 1000000,
+#    'mem_reservation': int(512 * 1e6),
+#}
