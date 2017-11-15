@@ -20,5 +20,10 @@ RUN git clone https://github.com/cassinyio/SwarmSpawner && \
     python3 setup.py install && \
     cd ..
 
+## Remote user authenticator
+RUN git clone https://github.com/cwaldbieser/jhub_remote_user_authenticator.git && \
+    cd jhub_remote_user_authenticator && \
+    pip install .
+
 COPY jupyterhub_config.py /srv/jupyterhub/
 CMD jupyterhub --debug
