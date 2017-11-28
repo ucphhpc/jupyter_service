@@ -3,6 +3,7 @@ FROM jupyter/base-notebook:e1677043235c
 MAINTAINER Rasmus Munk <rasmus.munk@nbi.ku.dk>
 
 USER root
+
 RUN apt-get update && \
     apt-get install -yq --no-install-recommends \
     libxml2-dev \
@@ -35,15 +36,24 @@ RUN pip install \
     'notebook>=5.0,<=6.0' \
     jupyterlab==0.29.2
 
-# Install bohrium
+# Create python2 environement
+RUN conda create -n python2 python=2 ipykernel && \
+    /opt/conda/envs/python2/bin/python -m ipykernel install --user && \
+    conda clean -tipsy && \
+    fix-permissions $CONDA_DIR
+
+# Install bohrium/matplotlib into python3 and python2 environment
 RUN conda install -qy gcc=4.8.2 && \
     conda install -qy -c bohrium bohrium && \
     conda install -qy matplotlib && \
+    conda install -qy -n python2 -c bohrium bohrium && \
+    conda install -qy -n python2 matplotlib && \
+    conda clean -tipsy && \
     fix-permissions $CONDA_DIR
 
 RUN ln -s /opt/conda/bin/gcc /opt/conda/bin/cc
 
-# Install R
+# Create R environment
 RUN conda create -n r && \
     conda install -qy -n r \
     'r-base=3.3.2' \
@@ -64,11 +74,6 @@ RUN conda create -n r && \
     conda clean -tipsy && \
     fix-permissions $CONDA_DIR && \
     /opt/conda/envs/r/bin/R -e 'IRkernel::installspec()'
-
-# install python2
-RUN conda create -n python2 python=2 ipykernel && \
-    /opt/conda/envs/python2/bin/python -m ipykernel install --user && \
-    fix-permissions $CONDA_DIR
 
 USER root
 RUN ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
