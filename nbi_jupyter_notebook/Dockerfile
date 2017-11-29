@@ -1,5 +1,4 @@
 FROM jupyter/base-notebook:e1677043235c
-
 MAINTAINER Rasmus Munk <rasmus.munk@nbi.ku.dk>
 
 USER root
@@ -19,7 +18,8 @@ RUN apt-get update && \
     gfortran \
     emacs \
     pandoc \
-    curl && apt-get clean && \
+    curl && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8888
@@ -76,6 +76,7 @@ RUN conda create -n r && \
     /opt/conda/envs/r/bin/R -e 'IRkernel::installspec()'
 
 USER root
+
 RUN ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
 ADD . /app
 RUN fix-permissions /app
@@ -91,7 +92,8 @@ RUN cd /app/nbi_data_access && \
     /opt/conda/envs/python2/bin/pip install -r requirements.txt && \
     /opt/conda/envs/python2/bin/pip install -r tests/requirements.txt && \
     /opt/conda/envs/python2/bin/python setup.py install && \
-    /opt/conda/envs/python2/bin/python setup.py test
+    /opt/conda/envs/python2/bin/python setup.py test && \
+    rm -r /app
 
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN /usr/local/bin/fix-permissions /etc/jupyter/
