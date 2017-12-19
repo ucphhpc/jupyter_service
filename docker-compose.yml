@@ -13,7 +13,7 @@ services:
     build: ./nbi_jupyterhub
     environment:
       ## Swarm manager
-      - DOCKER_HOST=dag000:2376
+      - DOCKER_HOST=dag000.science:2376
       - DOCKER_TLS_VERIFY=1
       - DOCKER_CERT_PATH=/etc/docker/certs
     volumes:
