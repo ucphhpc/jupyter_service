@@ -21,10 +21,17 @@ c.SwarmSpawner.networks = ["nbibda_service_default"]
 
 notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work'
 c.SwarmSpawner.notebook_dir = notebook_dir
+remote_home = notebook_dir + "/remote-home"
 
 mounts = [{'type': 'volume',
            'source': 'jupyterhub-user-{username}',
-           'target': notebook_dir}]
+           'target': notebook_dir},
+          {'type': 'volume',
+           'driver_config': 'rasmunk/sshfs:next',
+           'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}', 'allow_other': '', 'big_writes': '', 'reconnect': ''},
+           'source': 'sshvolume-user-{username}',
+           'target': remote_home
+           }]
 
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
@@ -35,12 +42,13 @@ c.SwarmSpawner.container_spec = {
 }
 
 ## Authenticator -> remote user header
-c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_auth.RemoteUserAuthenticator'
+c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_auth.MIGMountRemoteUserAuthenticator'
 
 # The values here are too low for our OpenStack system
-#c.SwarmSpawner.resource_spec = {
+# c.SwarmSpawner.resource_spec = {
 #    'cpu_limit': 1000000,
 #    'mem_limit': int(512 * 1e6),
 #    'cpu_reservation': 1000000,
 #    'mem_reservation': int(512 * 1e6),
-#}
+# }
+
