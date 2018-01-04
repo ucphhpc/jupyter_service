@@ -6,11 +6,12 @@ c = get_config()
 pwd = os.path.dirname(__file__)
 
 c.JupyterHub.spawner_class = 'cassinyspawner.SwarmSpawner'
+c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
 
 c.JupyterHub.base_url = '/dag'
 
-c.JupyterHub.cleanup_servers = False
+c.JupyterHub.cleanup_servers = True
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 5
@@ -19,18 +20,14 @@ c.SwarmSpawner.jupyterhub_service_name = 'nbibda_service_jupyterhub'
 
 c.SwarmSpawner.networks = ["nbibda_service_default"]
 
-notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work'
+notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
-remote_home = notebook_dir + "/remote-home"
 
 mounts = [{'type': 'volume',
-           'source': 'jupyterhub-user-{username}',
-           'target': notebook_dir},
-          {'type': 'volume',
            'driver_config': 'rasmunk/sshfs:next',
            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}', 'allow_other': '', 'big_writes': '', 'reconnect': ''},
            'source': 'sshvolume-user-{username}',
-           'target': remote_home
+           'target': notebook_dir
            }]
 
 # 'args' is the command to run inside the service
