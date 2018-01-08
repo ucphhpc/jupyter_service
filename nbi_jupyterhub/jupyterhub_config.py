@@ -42,10 +42,10 @@ c.SwarmSpawner.container_spec = {
 c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_auth.MIGMountRemoteUserAuthenticator'
 
 # The values here are too low for our OpenStack system
-# c.SwarmSpawner.resource_spec = {
-#    'cpu_limit': 1000000,
-#    'mem_limit': int(512 * 1e6),
-#    'cpu_reservation': 1000000,
-#    'mem_reservation': int(512 * 1e6),
-# }
+c.SwarmSpawner.resource_spec = {
+    'cpu_limit': int(4 * 1e9),
+    'mem_limit': int(4096 * 1e6),
+    'cpu_reservation': int(0.5 * 1e9),
+    'mem_reservation': int(512 * 1e6),
+}
 
