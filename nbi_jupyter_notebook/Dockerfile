@@ -94,7 +94,6 @@ RUN cd /app/nbi_data_access && \
     /opt/conda/envs/python2/bin/python setup.py install && \
     /opt/conda/envs/python2/bin/python setup.py test
 
-
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN /usr/local/bin/fix-permissions /etc/jupyter/
 

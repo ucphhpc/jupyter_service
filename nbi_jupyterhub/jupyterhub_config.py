@@ -25,7 +25,7 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 
 mounts = [{'type': 'volume',
            'driver_config': 'rasmunk/sshfs:next',
-           'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}', 'allow_other': '', 'big_writes': '', 'reconnect': ''},
+           'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}', 'allow_other':'', 'big_writes': '', 'reconnect': ''},
            'source': 'sshvolume-user-{username}',
            'target': notebook_dir
            }]
@@ -49,3 +49,11 @@ c.SwarmSpawner.resource_spec = {
     'mem_reservation': int(512 * 1e6),
 }
 
+# Service that checks for inactive notebooks
+c.JupyterHub.services = [
+    {
+        'name': 'cull-idle',
+        'admin': True,
+        'command': 'python cull_idle_servers.py --timeout=7200'.split(),
+    }
+]
