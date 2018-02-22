@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -qy --no-install-recommends \
     python3-pip && \
     useradd -ms /bin/bash jovyan
 
-## Remote user authenticator with support for MIG mount
+# Remote user authenticator with support for MIG mount
 RUN git clone https://github.com/rasmunk/jhub_remote_user_authenticator.git && \
     cd jhub_remote_user_authenticator && \
     pip install -r requirements.txt && \
@@ -16,7 +16,7 @@ RUN git clone https://github.com/rasmunk/jhub_remote_user_authenticator.git && \
 
 COPY SwarmSpawner /srv/jupyterhub/SwarmSpawner
 # SwarmSpawner with support for sshfs mount
-RUN git clone https://github.com/rasmunk/SwarmSpawner && \
+RUN cd /srv/jupyterhub/SwarmSpawner && \
     pip install -r requirements/base.txt && \
     pip install -r requirements/tests.txt && \
     touch README.rst && \
@@ -27,4 +27,4 @@ RUN pip install python-dateutil
 
 COPY jupyterhub_config.py /srv/jupyterhub/
 COPY cull_idle_servers.py /srv/jupyterhub/
-CMD jupyterhub --debug
+CMD jupyterhub

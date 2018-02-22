@@ -38,18 +38,27 @@ c.SwarmSpawner.container_spec = {
     'mounts': mounts
 }
 
-## Authenticator -> remote user header
+# Available docker images the user can spawn
+c.SwarmSpawner.dockerimages = [
+    {'image': '127.0.0.1:5000/nbi_jupyter_notebook',
+     'name': 'Image with default MiG Homedrive mount, supports Py2/3 and R'}
+]
+
+# Authenticator -> remote user header
 c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_auth.MIGMountRemoteUserAuthenticator'
 
-# The values here are too low for our OpenStack system
+# Limit cpu/mem to 4 cores/8 GB mem
+# During conjestion, kill random internal processes to limit
+# available load to 1 core/ 2GB mem 
 c.SwarmSpawner.resource_spec = {
     'cpu_limit': int(4 * 1e9),
-    'mem_limit': int(4096 * 1e6),
-    'cpu_reservation': int(0.5 * 1e9),
-    'mem_reservation': int(512 * 1e6),
+    'mem_limit': int(8192 * 1e6),
+    'cpu_reservation': int(1 * 1e9),
+    'mem_reservation': int(2048 * 1e6),
 }
 
 # Service that checks for inactive notebooks
+# Defaults to kill services that hasen't been used for 2 hours
 c.JupyterHub.services = [
     {
         'name': 'cull-idle',
