@@ -7,7 +7,11 @@ MAINTAINER Rasmus Munk <rasmus.munk@nbi.ku.dk>
 RUN apt-get update \
     && apt-get install -qy --no-install-recommends \
     python3-pip \
-    && useradd -ms /bin/bash jovyan
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+
+RUN useradd -ms /bin/bash jovyan
 
 # Remote user authenticator with support for MIG mount
 RUN git clone https://github.com/rasmunk/jhub_remote_user_authenticator.git \
@@ -28,4 +32,6 @@ RUN pip install python-dateutil
 
 COPY jupyterhub_config.py /srv/jupyterhub/
 COPY cull_idle_servers.py /srv/jupyterhub/
+
+USER joyyan
 CMD jupyterhub

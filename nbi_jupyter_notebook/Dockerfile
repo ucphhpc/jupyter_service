@@ -19,7 +19,7 @@ RUN apt-get update \
     emacs \
     pandoc \
     curl \
-    apt-get clean \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8888
