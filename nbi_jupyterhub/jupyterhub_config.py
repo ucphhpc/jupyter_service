@@ -1,6 +1,4 @@
 import os
-import docker
-import stat
 
 c = get_config()
 pwd = os.path.dirname(__file__)
@@ -25,7 +23,9 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 
 mounts = [{'type': 'volume',
            'driver_config': 'rasmunk/sshfs:next',
-           'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}', 'allow_other':'', 'big_writes': '', 'reconnect': ''},
+           'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
+                              'allow_other':'', 'big_writes': '',
+                              'reconnect': ''},
            'source': 'sshvolume-user-{username}',
            'target': notebook_dir
            }]
@@ -45,7 +45,9 @@ c.SwarmSpawner.dockerimages = [
 ]
 
 # Authenticator -> remote user header
-c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_auth.MIGMountRemoteUserAuthenticator'
+c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator' \
+                                   '.remote_user_auth' \
+                                   '.MIGMountRemoteUserAuthenticator'
 
 # Limit cpu/mem to 4 cores/8 GB mem
 # During conjestion, kill random internal processes to limit

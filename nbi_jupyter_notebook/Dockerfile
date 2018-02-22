@@ -3,8 +3,8 @@ MAINTAINER Rasmus Munk <rasmus.munk@nbi.ku.dk>
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -yq --no-install-recommends \
+RUN apt-get update \
+    && apt-get install -yq --no-install-recommends \
     libxml2-dev \
     libxslt-dev \
     libcurl4-openssl-dev \
@@ -18,9 +18,9 @@ RUN apt-get update && \
     gfortran \
     emacs \
     pandoc \
-    curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    curl \
+    apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8888
 
@@ -37,25 +37,29 @@ RUN pip install \
     jupyterlab==0.29.2
 
 # Create python2 environement
-RUN conda create -n python2 python=2 ipykernel && \
-    /opt/conda/envs/python2/bin/python -m ipykernel install --user && \
-    conda clean -tipsy && \
-    fix-permissions $CONDA_DIR
+RUN conda create -n python2 python=2 ipykernel \
+    && /opt/conda/envs/python2/bin/python -m ipykernel install --user \
+    && conda clean -tipsy \
+    && fix-permissions $CONDA_DIR
 
 # Install bohrium/matplotlib into python3 and python2 environment
-RUN conda install -qy gcc=4.8.2 && \
-    conda install -qy -c bohrium bohrium && \
-    conda install -qy matplotlib && \
-    conda install -qy -n python2 -c bohrium bohrium && \
-    conda install -qy -n python2 matplotlib && \
-    conda clean -tipsy && \
-    fix-permissions $CONDA_DIR
+RUN conda install -qy gcc=4.8.2 \
+    && conda install -qy -c bohrium bohrium \
+    && conda install -qy matplotlib \
+    && conda install -qy pandas \
+    && conda install -qy scikit-image \
+    && conda install -qy -n python2 -c bohrium bohrium \
+    && conda install -qy -n python2 matplotlib \
+    && conda install -qy -n python2 pandas \
+    && conda install -qy -n python2 scikit-image \
+    && conda clean -tipsy \
+    && fix-permissions $CONDA_DIR
 
 RUN ln -s /opt/conda/bin/gcc /opt/conda/bin/cc
 
 # Create R environment
-RUN conda create -n r && \
-    conda install -qy -n r \
+RUN conda create -n r \
+    && conda install -qy -n r \
     'r-base=3.3.2' \
     'r-irkernel=0.7*' \
     'r-plyr=1.8*' \
@@ -70,10 +74,10 @@ RUN conda create -n r && \
     'r-caret=6.0*' \
     'r-rcurl=1.95*' \
     'r-crayon=1.3*' \
-    'r-randomforest=4.6*' && \
-    conda clean -tipsy && \
-    fix-permissions $CONDA_DIR && \
-    /opt/conda/envs/r/bin/R -e 'IRkernel::installspec()'
+    'r-randomforest=4.6*' \
+    && conda clean -tipsy \
+    && fix-permissions $CONDA_DIR \
+    && /opt/conda/envs/r/bin/R -e 'IRkernel::installspec()'
 
 USER root
 
@@ -83,16 +87,21 @@ RUN fix-permissions /app
 
 USER jovyan
 
+ENV NBI_DATA_ACCESS_VER=0.0.1
+
 # Install ShareLinks data access lib for python3 and python2
-RUN cd /app/nbi_data_access && \
-    pip install -r requirements.txt && \
-    pip install -r tests/requirements.txt && \
-    python setup.py install && \
-    python setup.py test && \
-    /opt/conda/envs/python2/bin/pip install -r requirements.txt && \
-    /opt/conda/envs/python2/bin/pip install -r tests/requirements.txt && \
-    /opt/conda/envs/python2/bin/python setup.py install && \
-    /opt/conda/envs/python2/bin/python setup.py test
+RUN curl -SL https://github.com/rasmunk/nbi_data_access/archive/$NBI_DATA_ACCESS_VER.tar.gz \
+    | tar xz \
+    && mv nbi_data_access-$NBI_DATA_ACCESS_VER nbi_data_access \
+    && cd nbi_data_access \
+    && pip install -r requirements.txt \
+    && pip install -r tests/requirements.txt \
+    && python setup.py install \
+    && python setup.py test \
+    && /opt/conda/envs/python2/bin/pip install -r requirements.txt \
+    && /opt/conda/envs/python2/bin/pip install -r tests/requirements.txt \
+    && /opt/conda/envs/python2/bin/python setup.py install \
+    && /opt/conda/envs/python2/bin/python setup.py test
 
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN /usr/local/bin/fix-permissions /etc/jupyter/
