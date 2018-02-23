@@ -10,9 +10,6 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-
-RUN useradd -ms /bin/bash jovyan
-
 # Remote user authenticator with support for MIG mount
 RUN git clone https://github.com/rasmunk/jhub_remote_user_authenticator.git \
     && cd jhub_remote_user_authenticator \
@@ -33,5 +30,4 @@ RUN pip install python-dateutil
 COPY jupyterhub_config.py /srv/jupyterhub/
 COPY cull_idle_servers.py /srv/jupyterhub/
 
-USER joyyan
 CMD jupyterhub

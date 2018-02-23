@@ -5,10 +5,10 @@ USER root
 
 RUN apt-get update \
     && apt-get install -yq --no-install-recommends \
+    gcc \
     libxml2-dev \
     libxslt-dev \
     libcurl4-openssl-dev \
-    ssh \
     libx32gcc-4.8-dev \
     libc6-dev-i386 \
     libgl1-mesa-glx \
@@ -23,11 +23,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8888
-
-# Environement variables
-ENV BH_CONFIG /opt/conda/etc/bohrium/config.ini
-ENV CONDA_DIR=/opt/conda
-
 USER jovyan
 
 # Juptyer
@@ -36,26 +31,34 @@ RUN pip install \
     'notebook>=5.0,<=6.0' \
     jupyterlab==0.29.2
 
-# Create python2 environement
+# Environement variables
+ENV CONDA_DIR=/opt/conda
+ENV BH_CONFIG=/home/jovyan/.local/lib/python2.7/site-packages/bohrium/config.ini
+ENV PYTHON2_PATH=$CONDA_DIR/envs/python2
+ENV PYTHON3_PATH=$CONDA_DIR/envs/python3
+ENV NBI_DATA_ACCESS_VER=0.0.1
+
+# Create python2/3 environement
 RUN conda create -n python2 python=2 ipykernel \
-    && /opt/conda/envs/python2/bin/python -m ipykernel install --user \
+    && conda create -n python3 python=3 ipykernel \
+    && $PYTHON2_PATH/bin/python -m ipykernel install --user \
+    && $PYTHON3_PATH/bin/python -m ipykernel install --user \
     && conda clean -tipsy \
     && fix-permissions $CONDA_DIR
 
-# Install bohrium/matplotlib into python3 and python2 environment
-RUN conda install -qy gcc=4.8.2 \
-    && conda install -qy -c bohrium bohrium \
-    && conda install -qy matplotlib \
-    && conda install -qy pandas \
-    && conda install -qy scikit-image \
-    && conda install -qy -n python2 -c bohrium bohrium \
-    && conda install -qy -n python2 matplotlib \
-    && conda install -qy -n python2 pandas \
-    && conda install -qy -n python2 scikit-image \
+# Install bohrium/matplotlib/pandas/scikit-image for py2/py3
+RUN $PYTHON2_PATH/bin/pip install --user bohrium==0.8.10.post78 \
+    && $PYTHON2_PATH/bin/pip install \
+    matplotlib==2.1.2 \
+    pandas==0.22.0 \
+    scikit-image==0.13.1 \
+    && $PYTHON3_PATH/bin/pip install --user bohrium==0.8.10.post78 \
+    && $PYTHON3_PATH/bin/pip install \
+    matplotlib==2.1.2 \
+    pandas==0.22.0 \
+    scikit-image==0.13.1 \
     && conda clean -tipsy \
     && fix-permissions $CONDA_DIR
-
-RUN ln -s /opt/conda/bin/gcc /opt/conda/bin/cc
 
 # Create R environment
 RUN conda create -n r \
@@ -87,21 +90,19 @@ RUN fix-permissions /app
 
 USER jovyan
 
-ENV NBI_DATA_ACCESS_VER=0.0.1
-
 # Install ShareLinks data access lib for python3 and python2
 RUN curl -SL https://github.com/rasmunk/nbi_data_access/archive/$NBI_DATA_ACCESS_VER.tar.gz \
     | tar xz \
     && mv nbi_data_access-$NBI_DATA_ACCESS_VER nbi_data_access \
     && cd nbi_data_access \
-    && pip install -r requirements.txt \
-    && pip install -r tests/requirements.txt \
-    && python setup.py install \
-    && python setup.py test \
-    && /opt/conda/envs/python2/bin/pip install -r requirements.txt \
-    && /opt/conda/envs/python2/bin/pip install -r tests/requirements.txt \
-    && /opt/conda/envs/python2/bin/python setup.py install \
-    && /opt/conda/envs/python2/bin/python setup.py test
+    && $PYTHON2_PATH/bin/pip install -r requirements.txt \
+    && $PYTHON2_PATH/bin/pip install -r tests/requirements.txt \
+    && $PYTHON2_PATH/bin/python setup.py install \
+    && $PYTHON2_PATH/bin/pytest \
+    && $PYTHON3_PATH/bin/pip install -r requirements.txt \
+    && $PYTHON3_PATH/bin/pip install -r tests/requirements.txt \
+    && $PYTHON3_PATH/bin/python setup.py install \
+    && $PYTHON3_PATH/bin/pytest
 
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN /usr/local/bin/fix-permissions /etc/jupyter/

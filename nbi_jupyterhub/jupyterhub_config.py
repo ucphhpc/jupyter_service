@@ -24,7 +24,7 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 mounts = [{'type': 'volume',
            'driver_config': 'rasmunk/sshfs:next',
            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
-                              'allow_other':'', 'big_writes': '',
+                              'allow_other': '', 'big_writes': '',
                               'reconnect': ''},
            'source': 'sshvolume-user-{username}',
            'target': notebook_dir
