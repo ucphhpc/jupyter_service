@@ -1,9 +1,6 @@
-[submodule "nbi_data_access"]
-	path = nbi_data_access
-	url = https://github.com/rasmunk/nbi_data_access.git
-[submodule "nbi_jupyter_notebook/nbi_data_access"]
-	path = nbi_jupyter_notebook/nbi_data_access
-	url = https://github.com/rasmunk/nbi_data_access.git
 [submodule "nbi_jupyterhub/SwarmSpawner"]
 	path = nbi_jupyterhub/SwarmSpawner
 	url = https://github.com/rasmunk/SwarmSpawner.git
+[submodule "docker_nbi_mig_mount_notebook"]
+	path = docker_nbi_mig_mount_notebook
+	url = https://github.com/rasmunk/docker_nbi_mig_mount_notebook.git

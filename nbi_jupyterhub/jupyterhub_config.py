@@ -34,13 +34,13 @@ mounts = [{'type': 'volume',
 c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh'],
     # image needs to be previously pulled
-    'Image': '127.0.0.1:5000/nbi_jupyter_notebook',
+    'Image': '127.0.0.1:5000/nbi_mig_mount_notebook',
     'mounts': mounts
 }
 
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': '127.0.0.1:5000/nbi_jupyter_notebook',
+    {'image': '127.0.0.1:5000/nbi_mig_mount_notebook',
      'name': 'Image with default MiG Homedrive mount, supports Py2/3 and R'}
 ]
 
