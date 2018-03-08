@@ -1,6 +1,3 @@
 [submodule "nbi_jupyterhub/SwarmSpawner"]
 	path = nbi_jupyterhub/SwarmSpawner
 	url = https://github.com/rasmunk/SwarmSpawner.git
-[submodule "docker_nbi_mig_mount_notebook"]
-	path = docker_nbi_mig_mount_notebook
-	url = https://github.com/rasmunk/docker_nbi_mig_mount_notebook.git
