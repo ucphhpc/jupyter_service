@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   nginx:
-    image: 127.0.0.1:5000/nbi_nginx
+    image: 127.0.0.1:5000/nginx
     build: ./nginx
     links:
         - jupyterhub:jupyterhub
@@ -9,8 +9,8 @@ services:
       - "80:80"
 
   jupyterhub:
-    image: 127.0.0.1:5000/nbi_jupyterhub
-    build: ./nbi_jupyterhub
+    image: 127.0.0.1:5000/jupyterhub
+    build: ./hub
     environment:
       ## Swarm manager
       - DOCKER_HOST=dag000.science:2376
@@ -23,3 +23,7 @@ services:
       - type: bind
         source: ~/.docker/
         target: /etc/docker/certs
+
+  notebook:
+    image: 127.0.0.1:5000/notebook
+    build: ./notebook
