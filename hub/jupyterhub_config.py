@@ -45,6 +45,10 @@ c.SwarmSpawner.dockerimages = [
      'name': 'Image with automatic {mount_host} mount, supports Py2/3 and R'}
 ]
 
+c.SwarmSpawner.args = ['--ip=0.0.0.0', '--port=8888',
+                       '--browser=False',
+                       '--allow_origin=http://dag000.science']
+
 # Authenticator -> remote user header
 c.JupyterHub.authenticator_class = 'jhub_remote_user_auth_mig_mount' \
                                    '.remote_user_auth' \
