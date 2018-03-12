@@ -46,7 +46,7 @@ c.SwarmSpawner.dockerimages = [
 ]
 
 # Authenticator -> remote user header
-c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator' \
+c.JupyterHub.authenticator_class = 'jhub_remote_user_auth_mig_mount' \
                                    '.remote_user_auth' \
                                    '.MIGMountRemoteUserAuthenticator'
 

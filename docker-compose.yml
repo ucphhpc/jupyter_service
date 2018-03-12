@@ -7,7 +7,7 @@ services:
     ports:
       - "80:80"
     volumes:
-    - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
 
   jupyterhub:
     image: nielsbohr/jupyterhub
