@@ -3,7 +3,7 @@ import os
 c = get_config()
 pwd = os.path.dirname(__file__)
 
-c.JupyterHub.spawner_class = 'cassinyspawner.SwarmSpawner'
+c.JupyterHub.spawner_class = 'mig.SwarmSpawner'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
 
@@ -14,7 +14,7 @@ c.JupyterHub.cleanup_servers = True
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 5
 
-c.SwarmSpawner.jupyterhub_service_name = 'nbibda_service_jupyterhub'
+c.SwarmSpawner.jupyterhub_service_name = 'nbi_jupyter_service'
 
 c.SwarmSpawner.networks = ["nbibda_service_default"]
 
@@ -34,14 +34,14 @@ mounts = [{'type': 'volume',
 c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh'],
     # image needs to be previously pulled
-    'Image': 'nielsbohr/nbi_base_notebook',
+    'Image': 'nielsbohr/base-notebook',
     'mounts': mounts
 }
 
 # TODO -> Dynamic MOUNT-HOST naming
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': 'nielsbohr/nbi_base_notebook',
+    {'image': 'nielsbohr/base-notebook',
      'name': 'Image with automatic {mount_host} mount, supports Py2/3 and R'}
 ]
 
@@ -49,16 +49,6 @@ c.SwarmSpawner.dockerimages = [
 c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator' \
                                    '.remote_user_auth' \
                                    '.MIGMountRemoteUserAuthenticator'
-
-# Limit cpu/mem to 4 cores/8 GB mem
-# During conjestion, kill random internal processes to limit
-# available load to 1 core/ 2GB mem 
-c.SwarmSpawner.resource_spec = {
-    'cpu_limit': int(8 * 1e9),
-    'mem_limit': int(8192 * 1e6),
-    'cpu_reservation': int(1 * 1e9),
-    'mem_reservation': int(2048 * 1e6),
-}
 
 # Service that checks for inactive notebooks
 # Defaults to kill services that hasen't been used for 2 hours
@@ -69,3 +59,13 @@ c.JupyterHub.services = [
         'command': 'python cull_idle_servers.py --timeout=7200'.split(),
     }
 ]
+
+# Limit cpu/mem to 4 cores/8 GB mem
+# During conjestion, kill random internal processes to limit
+# available load to 1 core/ 2GB mem 
+c.SwarmSpawner.resource_spec = {
+    'cpu_limit': int(8 * 1e9),
+    'mem_limit': int(8192 * 1e6),
+    'cpu_reservation': int(1 * 1e9),
+    'mem_reservation': int(2048 * 1e6),
+}

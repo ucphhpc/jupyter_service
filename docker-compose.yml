@@ -1,16 +1,16 @@
 version: '3.2'
 services:
   nginx:
-    image: 127.0.0.1:5000/nginx
-    build: ./nginx
+    image: nginx
     links:
         - jupyterhub:jupyterhub
     ports:
       - "80:80"
+    volumes:
+    - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
 
   jupyterhub:
-    image: 127.0.0.1:5000/jupyterhub
-    build: ./hub
+    image: nielsbohr/jupyterhub
     environment:
       ## Swarm manager
       - DOCKER_HOST=dag000.science:2376
@@ -23,7 +23,9 @@ services:
       - type: bind
         source: ~/.docker/
         target: /etc/docker/certs
-
-  notebook:
-    image: 127.0.0.1:5000/notebook
-    build: ./notebook
+      # Mount both the config file for the jupyterhub server itself and the
+      # script that kills idle containers. Furthermore the base-notebook
+      # notebook image config must be mounted so that jupyterhub has access
+      # to it
+      - ./hub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
+      - ./hub/cull_idle_servers.py:/srv/jupyterhub/cull_idle_servers.py:ro
