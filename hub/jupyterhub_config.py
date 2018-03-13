@@ -14,7 +14,7 @@ c.JupyterHub.cleanup_servers = True
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 5
 
-c.SwarmSpawner.jupyterhub_service_name = 'nbi_jupyter_service'
+c.SwarmSpawner.jupyterhub_service_name = 'nbibda_service_default'
 
 c.SwarmSpawner.networks = ["nbibda_service_default"]
 
@@ -30,9 +30,12 @@ mounts = [{'type': 'volume',
            'target': notebook_dir
            }]
 
+notebook_args = ['--NotebookApp.ip=0.0.0.0', '--NotebookApp.port=8888',
+                 '--NotebookApp.allow_origin=http://dag000.science']
+
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
-    'args': ['/usr/local/bin/start-singleuser.sh'],
+    'args': ['/usr/local/bin/start-singleuser.sh'].extend(notebook_args),
     # image needs to be previously pulled
     'Image': 'nielsbohr/base-notebook',
     'mounts': mounts
@@ -44,10 +47,6 @@ c.SwarmSpawner.dockerimages = [
     {'image': 'nielsbohr/base-notebook',
      'name': 'Image with automatic {mount_host} mount, supports Py2/3 and R'}
 ]
-
-c.SwarmSpawner.args = ['--ip=0.0.0.0', '--port=8888',
-                       '--browser=False',
-                       '--allow_origin=http://dag000.science']
 
 # Authenticator -> remote user header
 c.JupyterHub.authenticator_class = 'jhub_remote_user_auth_mig_mount' \
