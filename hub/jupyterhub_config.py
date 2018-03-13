@@ -14,7 +14,7 @@ c.JupyterHub.cleanup_servers = True
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 5
 
-c.SwarmSpawner.jupyterhub_service_name = 'nbibda_service_default'
+c.SwarmSpawner.jupyterhub_service_name = 'nbibda_service_jupyterhub'
 
 c.SwarmSpawner.networks = ["nbibda_service_default"]
 
@@ -30,12 +30,9 @@ mounts = [{'type': 'volume',
            'target': notebook_dir
            }]
 
-notebook_args = ['--NotebookApp.ip=0.0.0.0', '--NotebookApp.port=8888',
-                 '--NotebookApp.allow_origin=http://dag000.science']
-
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
-    'args': ['/usr/local/bin/start-singleuser.sh'].extend(notebook_args),
+    'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0', '--NotebookApp.port=8888', '--NotebookApp.allow_origin=http://dag000.science'],
     # image needs to be previously pulled
     'Image': 'nielsbohr/base-notebook',
     'mounts': mounts
