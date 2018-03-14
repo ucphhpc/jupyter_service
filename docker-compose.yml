@@ -9,6 +9,7 @@ services:
     volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
 
+
   jupyterhub:
     image: nielsbohr/jupyterhub:devel
     environment:
