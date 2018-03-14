@@ -34,7 +34,7 @@ mounts = [{'type': 'volume',
 c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0', '--NotebookApp.port=8888', '--NotebookApp.allow_origin=http://dag000.science'],
     # image needs to be previously pulled
-    'Image': 'nielsbohr/base-notebook',
+    'Image': 'nielsbohr/base-notebook:devel',
     'mounts': mounts
 }
 
