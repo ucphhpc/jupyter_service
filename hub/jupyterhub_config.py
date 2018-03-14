@@ -14,9 +14,9 @@ c.JupyterHub.cleanup_servers = True
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 5
 
-c.SwarmSpawner.jupyterhub_service_name = 'nbibda_service_jupyterhub'
+c.SwarmSpawner.jupyterhub_service_name = 'nbi-jupyter-service-jupyterhub'
 
-c.SwarmSpawner.networks = ["nbibda_service_default"]
+c.SwarmSpawner.networks = ["nbi-jupyter-service-default"]
 
 notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
@@ -41,7 +41,7 @@ c.SwarmSpawner.container_spec = {
 # TODO -> Dynamic MOUNT-HOST naming
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': 'nielsbohr/base-notebook',
+    {'image': 'nielsbohr/base-notebook:devel',
      'name': 'Image with automatic {mount_host} mount, supports Py2/3 and R'}
 ]
 
