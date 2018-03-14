@@ -1,0 +1,2 @@
+hub/jupyterhub_config.py merge=ours
+docker-compose.yml merge=ours
