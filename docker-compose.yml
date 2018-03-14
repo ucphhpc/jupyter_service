@@ -10,7 +10,7 @@ services:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
 
   jupyterhub:
-    image: nielsbohr/jupyterhub:devel
+    image: nielsbohr/jupyterhub
     environment:
       ## Swarm manager
       - DOCKER_HOST=dag000.science:2376
