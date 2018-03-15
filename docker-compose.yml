@@ -3,7 +3,7 @@ services:
   nginx:
     image: nginx
     links:
-        - jupyterhub:jupyterhub
+	- jupyterhub:jupyterhub
     ports:
       - "80:80"
     volumes:
@@ -11,21 +11,13 @@ services:
 
   jupyterhub:
     image: nielsbohr/jupyterhub
-    environment:
-      ## Swarm manager
-      - DOCKER_HOST=dag000.science:2376
-      - DOCKER_TLS_VERIFY=1
-      - DOCKER_CERT_PATH=/etc/docker/certs
     volumes:
-      # Bind home docker folder -> expected to contain ca.pem, cert.pem and key.pem
-      # Used by the jupyterhub to instruct the docker process on the host to spawn a notebook
-      # See https://docs.docker.com/engine/security/https/#other-modes for info on how to create the files
-      - type: bind
-        source: ~/.docker/
-        target: /etc/docker/certs
       # Mount both the config file for the jupyterhub server itself and the
       # script that kills idle containers. Furthermore the base-notebook
       # notebook image config must be mounted so that jupyterhub has access
       # to it
       - ./hub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
       - ./hub/cull_idle_servers.py:/srv/jupyterhub/cull_idle_servers.py:ro
+      # The jupyterhub service needs access to the docker daemon process
+      # to launch additional notebook services from within the service itself
+      - /var/run/docker.sock:/var/run/docker.sock:rw
