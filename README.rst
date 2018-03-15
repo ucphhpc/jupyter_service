@@ -44,7 +44,7 @@ the user that executes the ``deploy`` command is part of the ``docker`` system
 group. This is the default approach as set in the docker-compose.yml file.
 
 Another approach would be to expose the docker daemon remotely on port 2376
-with TLS verification as explained @ `Docker Docker <https://docs.docker
+with TLS verification as explained @ `Docker Docs <https://docs.docker
 .com/engine/reference/commandline/dockerd/#description>`_ under "Daemon
 socket option".
 
