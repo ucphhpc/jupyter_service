@@ -40,7 +40,7 @@ Before the jupyterhub service is able to launch seperate notebook services,
 jupyterhub needs access to the hosts docker daemon process. This access can
 be gained in a number of ways, one of which is to mount the /var/run/docker
 .sock file inside the jupyterhub service as a volume and then ensuring that
-the user that executes the ``deploy`` command is part of the :docker system
+the user that executes the ``deploy`` command is part of the ``docker`` system
 group. This is the default approach as set in the docker-compose.yml file.
 
 Another approach would be to expose the docker daemon remotely on port 2376
