@@ -22,7 +22,8 @@ nbi_jupyter_service interconnects can be seen below:
 The stack is made of a 3 layered docker service stack, i.e. any external
 request is received by the Nginx front proxy service. This forwards any
 request to the jupyterhub upstream nginx pool via the overlay virtual
-`nbi-jupyter-service_default` network.
+``nbi-jupyter-service_default`` network.
+
 
 Whether requests needs to be authenticated to launch notebooks via the
 jupyterhub web interface, depends on which `authenticator_class` is defined in
@@ -39,7 +40,7 @@ Before the jupyterhub service is able to launch seperate notebook services,
 jupyterhub needs access to the hosts docker daemon process. This access can
 be gained in a number of ways, one of which is to mount the /var/run/docker
 .sock file inside the jupyterhub service as a volume and then ensuring that
-the user that executes the `deploy` command is part of the `docker` system
+the user that executes the `deploy` command is part of the :docker system
 group. This is the default approach as set in the docker-compose.yml file.
 
 Another approach would be to expose the docker daemon remotely on port 2376
