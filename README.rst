@@ -36,4 +36,5 @@ Architecture
 An overview of how the different components of the
 nbi_jupyter_service interconnects can be seen below:
 
-Coming soon ...
+.. image:: docs/nbi-jupyter-service.png
+   :width: 40pt
