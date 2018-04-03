@@ -10,7 +10,7 @@ services:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
 
   jupyterhub:
-    image: nielsbohr/jupyterhub
+    image: nielsbohr/jupyterhub:latest
     volumes:
       # Mount both the config file for the jupyterhub server itself and the
       # script that kills idle containers. Furthermore the base-notebook
