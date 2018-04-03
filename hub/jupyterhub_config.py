@@ -32,17 +32,16 @@ mounts = [{'type': 'volume',
 
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
-    'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0', '--NotebookApp.port=8888', '--NotebookApp.allow_origin=http://dag000.science'],
-    # image needs to be previously pulled
-    'Image': 'nielsbohr/base-notebook:devel',
-    'mounts': mounts
+    'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0',
+             '--NotebookApp.port=8888',
+             '--NotebookApp.allow_origin=http://dag000.science']
 }
 
-# TODO -> Dynamic MOUNT-HOST naming
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
     {'image': 'nielsbohr/base-notebook:devel',
-     'name': 'Image with automatic {mount_host} mount, supports Py2/3 and R'}
+     'name': 'Image with automatic {mount_host} mount, supports Py2/3 and R',
+     'mounts': mounts}
 ]
 
 # Authenticator -> remote user header
