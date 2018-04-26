@@ -35,14 +35,21 @@ c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0',
              '--NotebookApp.port=8888',
              '--NotebookApp.allow_origin=http://dag000.science'],
-    'env': {'JUPYTER_ENABLE_LAB': '1'}
+    'env': {'JUPYTER_ENABLE_LAB': '1',
+            'TZ': 'Europe/Copenhagen'}
 }
+
+# Before the user can select which image to spawn,
+# user_options has to be enabled
+c.SwarmSpawner.use_user_options = True
 
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
     {'image': 'nielsbohr/base-notebook:devel',
      'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R',
-     'mounts': mounts}
+     'mounts': mounts},
+    {'image': 'jupyter/base-notebook:9f9e5ca8fe5a',
+     'name': 'Minimal python notebook'}
 ]
 
 # Authenticator -> remote user header
