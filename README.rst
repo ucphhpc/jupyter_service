@@ -48,6 +48,8 @@ with TLS verification as explained @ `Docker Docs <https://docs.docker
 .com/engine/reference/commandline/dockerd/#description>`_ under "Daemon
 socket option".
 
+In addition it requires that the host is an initialized swarm manager. see `Create a swarm <https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm>`_
+
 ---------------------
 Launching the Service
 ---------------------
@@ -55,7 +57,7 @@ Launching the Service
 To run this stack, simply execute the following command inside the repo
 directory::
 
-    docker stack deploy --compose-file docker-compose.yml nbi-jupyter-service
+    docker stack deploy --compose-file docker-compose.yml nbi-jupyter-service-devel
 
 
 To verify that the stack is now deployed and the services are being spawned
