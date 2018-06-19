@@ -12,7 +12,7 @@ c.JupyterHub.base_url = '/dag'
 c.JupyterHub.cleanup_servers = True
 
 # First pulls can be really slow, so let's give it a big timeout
-c.SwarmSpawner.start_timeout = 60 * 5
+c.SwarmSpawner.start_timeout = 60 * 10
 
 c.SwarmSpawner.jupyterhub_service_name = 'nbi-jupyter-service_jupyterhub'
 
