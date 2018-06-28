@@ -24,8 +24,7 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 mounts = [{'type': 'volume',
            'driver_config': 'rasmunk/sshfs:latest',
            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
-                              'allow_other': '', 'big_writes': '',
-                              'reconnect': ''},
+                              'allow_other': '', 'big_writes': ''},
            'source': 'sshvolume-user-{username}',
            'target': notebook_dir
            }]
@@ -72,5 +71,5 @@ c.SwarmSpawner.resource_spec = {
     'cpu_limit': int(8 * 1e9),
     'mem_limit': int(8192 * 1e6),
     'cpu_reservation': int(1 * 1e9),
-    'mem_reservation': int(2048 * 1e6),
+    'mem_reservation': int(1024 * 1e6),
 }
