@@ -53,9 +53,7 @@ c.SwarmSpawner.dockerimages = [
 ]
 
 # Authenticator -> remote user header
-c.JupyterHub.authenticator_class = 'jhub_remote_user_auth_mig_mount' \
-                                   '.remote_user_auth' \
-                                   '.MIGMountRemoteUserAuthenticator'
+c.JupyterHub.authenticator_class = 'jhub_remote_auth_mount.MountRemoteUserAuthenticator'
 
 # Service that checks for inactive notebooks
 # Defaults to kill services that hasen't been used for 2 hours
