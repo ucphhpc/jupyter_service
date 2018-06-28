@@ -1,15 +1,5 @@
 version: '3.2'
 services:
-  nginx:
-    image: nginx
-    links:
-        - jupyterhub:jupyterhub
-    ports:
-      - "80:80"
-    volumes:
-    - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    environment:
-      TZ: Europe/Copenhagen
   jupyterhub:
     image: nielsbohr/jupyterhub:devel
     environment:
@@ -24,14 +14,30 @@ services:
       # The jupyterhub service needs access to the docker daemon process
       # to launch additional notebook services from within the service itself
       - /var/run/docker.sock:/var/run/docker.sock:rw
+  nginx:
+    depends_on:
+      - "jupyterhub"
+    image: nginx
+    links:
+        - jupyterhub:jupyterhub
+    ports:
+      - "80:80"
+    volumes:
+    - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      TZ: Europe/Copenhagen
   ssh-mount-requester:
+    depends_on:
+      - "ssh-mount-dummy"
     image: jupyterhub-sshfs-mounter
     build: ./jupyterhub-sshfs-mounter
-    volmues:
+    volumes:
       - type: volume
         source: mountuser-home
         target: /opt/mountuser
   ssh-mount-dummy:
+    depends_on:
+      - "nginx"
     image: nielsbohr/docker-ssh-mount-dummy:latest
     ports:
     - "2222:22"
