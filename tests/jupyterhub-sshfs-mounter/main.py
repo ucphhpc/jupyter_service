@@ -11,6 +11,8 @@ parser.add_argument('--auth-url', dest='auth_url',
                     default='/hub/login')
 parser.add_argument('--spawn-url', dest='spawn_url',
                     default='/hub/spawn')
+parser.add_argument('--docker-image', dest='docker_image',
+                    default='jupyterhub/singleuser:0.8.1')
 
 
 def main(args):
@@ -50,8 +52,12 @@ def main(args):
         session.get(args.hub_url + args.auth_url, headers=auth_header)
         # Mount
         session.post(args.hub_url + args.mount_url, headers=mount_header)
+        payload = {
+            'dockerimage': args.docker_image
+        }
+
         # Spawn
-        session.post(args.hub_url + args.spawn_url, headers=auth_header)
+        session.post(args.hub_url + args.spawn_url, payload=payload, headers=auth_header)
 
 
 if __name__ == '__main__':
