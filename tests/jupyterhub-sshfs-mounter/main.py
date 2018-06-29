@@ -9,6 +9,8 @@ parser.add_argument('--mount-url', dest='mount_url',
                     default='/hub/mount')
 parser.add_argument('--auth-url', dest='auth_url',
                     default='/hub/login')
+parser.add_argument('--spawn-url', dest='spawn_url',
+                    default='/hub/spawn')
 
 
 def main(args):
@@ -48,6 +50,8 @@ def main(args):
         session.get(args.hub_url + args.auth_url, headers=auth_header)
         # Mount
         session.post(args.hub_url + args.mount_url, headers=mount_header)
+        # Spawn
+        session.post(args.hub_url + args.spawn_url, headers=auth_header)
 
 
 if __name__ == '__main__':
