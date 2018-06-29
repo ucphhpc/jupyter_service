@@ -29,8 +29,7 @@ services:
   ssh-mount-requester:
     depends_on:
       - "ssh-mount-dummy"
-    image: jupyterhub-sshfs-mounter
-    build: ./jupyterhub-sshfs-mounter
+    image: nielsbohr/jupyterhub-sshfs-mounter:latest
     volumes:
       - type: volume
         source: mountuser-home
@@ -38,10 +37,13 @@ services:
   ssh-mount-dummy:
     depends_on:
       - "nginx"
-    image: nielsbohr/docker-ssh-mount-dummy:latest
+    image: nielsbohr/ssh-mount-dummy:latest
     ports:
-    - "2222:22"
+      - "2222:22"
     volumes:
       - type: volume
         source: mountuser-home
         target: /home/mountuser
+
+volumes:
+  mountuser-home:

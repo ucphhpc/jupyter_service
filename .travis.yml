@@ -1,0 +1,25 @@
+sudo: required
+services: docker
+language: python
+python: '3.6'
+before_install:
+- cd tests/jupyterhub-sshfs-mounter
+- sudo apt-get update
+- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+env:
+  global:
+  - IMAGE_NAME=nielsbohr/jupyterhub-sshfs-mounter
+  - IMAGE_VERS=latest
+install:
+- pip install -r requirements.txt
+script:
+- flake8
+before_deploy:
+- docker build -t "${IMAGE_NAME}":latest .
+deploy:
+  provider: script
+  script: bash docker_push
+  on:
+    branch: tests
+notifications:
+  slack: raz-s:se1PurXsQJv03nBZa9XWMOOS

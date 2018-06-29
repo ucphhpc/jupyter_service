@@ -12,7 +12,6 @@ parser.add_argument('--auth-url', dest='auth_url',
 
 
 def main(args):
-
     request_user = 'mountuser'
     home = "/opt/{}".format(request_user)
     ssh_dir = "{}/.ssh".format(home)

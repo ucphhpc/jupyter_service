@@ -1,2 +1,2 @@
 requests==2.18.4
-paramiko==2.4.0
+flake8==3.5.0
