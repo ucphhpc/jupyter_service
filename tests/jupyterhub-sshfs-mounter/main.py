@@ -35,14 +35,14 @@ def main(args):
     auth_header = {'Remote-User': user_cert}
 
     mount_header = {'Remote-User': user_cert,
-                    'Mig-Mount': str(mount_dict)}
+                    'Mount': str(mount_dict)}
 
     with requests.Session() as session:
         try:
             session.get(args.hub_url)
         except (requests.ConnectionError, requests.exceptions.InvalidSchema):
             print("{} can't be reached".format(args.hub_url))
-            return 1
+            exit(-1)
 
         # Auth
         session.get(args.hub_url + args.auth_url, headers=auth_header)

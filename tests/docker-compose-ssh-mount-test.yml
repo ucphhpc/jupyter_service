@@ -44,7 +44,7 @@ services:
   ssh-mount-dummy:
     depends_on:
       - "nginx"
-    image: nielsbohr/ssh-mount-dummy:latest
+    image: nielsbohr/ssh-mount-dummy
     ports:
       - "2222:22"
     volumes:

@@ -67,7 +67,7 @@ c.JupyterHub.services = [
 
 # Limit cpu/mem to 4 cores/8 GB mem
 # During conjestion, kill random internal processes to limit
-# available load to 1 core/ 2GB mem 
+# available load to 1 core/ 2GB mem
 c.SwarmSpawner.resource_spec = {
     'cpu_limit': int(8 * 1e9),
     'mem_limit': int(8192 * 1e6),
