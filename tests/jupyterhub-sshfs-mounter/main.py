@@ -57,7 +57,8 @@ def main(args):
         }
 
         # Spawn
-        session.post(args.hub_url + args.spawn_url, payload=payload, headers=auth_header)
+        session.post(args.hub_url + args.spawn_url,
+                     payload=payload, headers=auth_header)
 
 
 if __name__ == '__main__':
