@@ -34,6 +34,7 @@ services:
       - type: volume
         source: mountuser-home
         target: /opt/mountuser
+    command: --hub-url=http://192.168.99.100 --mount-url=/hub/mount --auth-url=/hub/login
   ssh-mount-dummy:
     depends_on:
       - "nginx"
