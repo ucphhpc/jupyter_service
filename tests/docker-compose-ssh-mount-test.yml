@@ -35,6 +35,12 @@ services:
         source: mountuser-home
         target: /opt/mountuser
     command: --hub-url=http://192.168.99.100 --mount-url=/hub/mount --auth-url=/hub/login
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+        window: 30s
   ssh-mount-dummy:
     depends_on:
       - "nginx"

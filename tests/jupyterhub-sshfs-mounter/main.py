@@ -47,7 +47,7 @@ def main(args):
         # Auth
         session.get(args.hub_url + args.auth_url, headers=auth_header)
         # Mount
-        session.get(args.hub_url + args.mount_url, headers=mount_header)
+        session.post(args.hub_url + args.mount_url, headers=mount_header)
 
 
 if __name__ == '__main__':

@@ -10,6 +10,7 @@ c.JupyterHub.hub_ip = '0.0.0.0'
 c.JupyterHub.base_url = '/dag'
 
 c.JupyterHub.cleanup_servers = True
+c.JupyterHub.debug = True
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 5
