@@ -19,7 +19,6 @@ def main(args):
     request_user = 'mountuser'
     home = "/opt/{}".format(request_user)
     ssh_dir = "{}/.ssh".format(home)
-
     f_path = "{}/id_rsa".format(ssh_dir)
 
     with open(f_path, 'r') as file:
@@ -31,15 +30,10 @@ def main(args):
     # Auth requests
     user_cert = '/C=DK/ST=NA/L=NA/O=NBI/OU=NA/CN=Name' \
                 '/emailAddress=mail@sdfsf.com'
-
+    headers = {'Remote-User': user_cert}
     mount_dict = {'HOST': 'DUMMY', 'USERNAME': request_user,
                   'PATH': ''.join(['@', ssh_host_target, ':']),
                   'PRIVATEKEY': private_key}
-
-    auth_header = {'Remote-User': user_cert}
-
-    mount_header = {'Remote-User': user_cert,
-                    'Mount': str(mount_dict)}
 
     with requests.Session() as session:
         try:
@@ -49,16 +43,17 @@ def main(args):
             exit(-1)
 
         # Auth
-        session.get(args.hub_url + args.auth_url, headers=auth_header)
+        session.get(args.hub_url + args.auth_url, headers=headers)
         # Mount
-        session.post(args.hub_url + args.mount_url, headers=mount_header)
+        headers.update({'Mount': str(mount_dict)})
+        session.post(args.hub_url + args.mount_url, headers=headers)
         payload = {
             'dockerimage': args.docker_image
         }
 
         # Spawn
         session.post(args.hub_url + args.spawn_url,
-                     data=payload, headers=auth_header)
+                     data=payload, headers=headers)
 
 
 if __name__ == '__main__':
