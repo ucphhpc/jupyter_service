@@ -1,3 +1,4 @@
+
 import os
 
 c = get_config()
@@ -15,9 +16,9 @@ c.JupyterHub.debug = True
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
 
-c.SwarmSpawner.jupyterhub_service_name = 'nbi-jupyter-service-devel_jupyterhub'
+c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service-devel_jupyterhub'
 
-c.SwarmSpawner.networks = ["nbi-jupyter-service-devel_default"]
+c.SwarmSpawner.networks = ["jupyter-service-devel_default"]
 
 notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
@@ -34,7 +35,7 @@ mounts = [{'type': 'volume',
 c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0',
              '--NotebookApp.port=8888',
-             '--NotebookApp.allow_origin=http://dag000.science'],
+             '--NotebookApp.allow_origin=http://192.168.99.100'],
     'env': {'JUPYTER_ENABLE_LAB': '1',
             'TZ': 'Europe/Copenhagen'}
 }
@@ -53,7 +54,8 @@ c.SwarmSpawner.dockerimages = [
 ]
 
 # Authenticator -> remote user header
-c.JupyterHub.authenticator_class = 'jhub_remote_auth_mount.MountRemoteUserAuthenticator'
+c.JupyterHub.authenticator_class = 'jhubauthenticators.DummyAuthenticator'
+c.DummyAuthenticator.password = 'password'
 
 # Service that checks for inactive notebooks
 # Defaults to kill services that hasen't been used for 2 hours

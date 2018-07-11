@@ -3,11 +3,11 @@ services:
   nginx:
     image: nginx
     links:
-        - jupyterhub:jupyterhub
+      - jupyterhub:jupyterhub
     ports:
       - "80:80"
     volumes:
-    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     environment:
       TZ: Europe/Copenhagen
   jupyterhub:
