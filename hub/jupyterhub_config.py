@@ -8,10 +8,7 @@ c.JupyterHub.spawner_class = 'mig.SwarmSpawner'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
 
-c.JupyterHub.base_url = '/dag'
-
-c.JupyterHub.cleanup_servers = True
-c.JupyterHub.debug = True
+c.JupyterHub.base_url = '/base_url'
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
@@ -35,7 +32,7 @@ mounts = [{'type': 'volume',
 c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0',
              '--NotebookApp.port=8888',
-             '--NotebookApp.allow_origin=http://192.168.99.100'],
+             '--NotebookApp.allow_origin=http://127.0.0.1'],
     'env': {'JUPYTER_ENABLE_LAB': '1',
             'TZ': 'Europe/Copenhagen'}
 }
