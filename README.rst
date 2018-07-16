@@ -14,15 +14,15 @@ Architecture
 ------------
 
 An overview of how the different components of the
-nbi_jupyter_service interconnects can be seen below:
+jupyter_service interconnects can be seen below:
 
-.. image:: docs/nbi-jupyter-service.jpg
+.. image:: docs/jupyter-service.jpg
    :width: 40pt
 
 The stack is made of a 3 layered docker service stack, i.e. any external
 request is received by the Nginx front proxy service. This forwards any
 request to the jupyterhub upstream nginx pool via the overlay virtual
-``nbi-jupyter-service_default`` network.
+``jupyter-service_default`` network.
 
 
 Whether requests needs to be authenticated to launch notebooks via the
@@ -55,7 +55,7 @@ Launching the Service
 To run this stack, simply execute the following command inside the repo
 directory::
 
-    docker stack deploy --compose-file docker-compose.yml nbi-jupyter-service
+    docker stack deploy --compose-file docker-compose.yml jupyter-service
 
 
 To verify that the stack is now deployed and the services are being spawned
