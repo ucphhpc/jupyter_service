@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   jupyterhub:
-    image: nielsbohr/jupyterhub:edge
+    image: nielsbohr/jupyterhub:devel
     ports:
        - "80:8000"
     environment:
@@ -11,8 +11,9 @@ services:
       # script that kills idle containers. Furthermore the base-notebook
       # notebook image config must be mounted so that jupyterhub has access
       # to it
-      - ./hub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
+      - ./hub/jupyterhub_config.py:/etc/jupyterhub/jupyterhub_config.py:ro
       - ./hub/cull_idle_servers.py:/srv/jupyterhub/cull_idle_servers.py:ro
       # The jupyterhub service needs accces to the docker daemon process
       # to launch addtional notebook services from within the service itself
       - /var/run/docker.sock:/var/run/docker.sock:rw
+    command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --debug
