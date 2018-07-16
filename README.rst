@@ -57,7 +57,7 @@ Launching the Service
 To run this stack, simply execute the following command inside the repo
 directory::
 
-    docker stack deploy --compose-file docker-compose.yml jupyter-service-devel
+    docker stack deploy --compose-file docker-compose.yml jupyter-service
 
 
 To verify that the stack is now deployed and the services are being spawned

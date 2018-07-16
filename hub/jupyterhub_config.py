@@ -1,21 +1,18 @@
-
 import os
 
 c = get_config()
-pwd = os.path.dirname(__file__)
 
 c.JupyterHub.spawner_class = 'mig.SwarmSpawner'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
-
 c.JupyterHub.base_url = '/base_url'
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
 
-c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service-devel_jupyterhub'
+c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service_jupyterhub'
 
-c.SwarmSpawner.networks = ["jupyter-service-devel_default"]
+c.SwarmSpawner.networks = ["jupyter-service_default"]
 
 notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
@@ -43,11 +40,9 @@ c.SwarmSpawner.use_user_options = True
 
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': 'nielsbohr/base-notebook:devel',
+    {'image': 'nielsbohr/base-notebook:latest',
      'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R',
-     'mounts': mounts},
-    {'image': 'nielsbohr/base-notebook:devel',
-     'name': 'Basic Python Notebook'}
+     'mounts': mounts}
 ]
 
 # Authenticator -> remote user header
