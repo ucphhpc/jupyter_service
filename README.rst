@@ -1,5 +1,5 @@
 ===================
-nbi_jupyter_service
+jupyter_service
 ===================
 
 A jupyter notebook docker swarm setup that consists of a standard proxy nginx
