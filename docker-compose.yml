@@ -16,4 +16,12 @@ services:
       # The jupyterhub service needs accces to the docker daemon process
       # to launch addtional notebook services from within the service itself
       - /var/run/docker.sock:/var/run/docker.sock:rw
-    command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
+    command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --debug
+  docker-volume-monitor:
+    image: rasmunk/docker-volume-monitor
+    deploy:
+      mode: global
+    environment:
+      TZ: Europe/Copenhagen
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock

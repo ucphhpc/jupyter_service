@@ -19,7 +19,7 @@ notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
 mounts = [{'type': 'volume',
-           'driver_config': 'rasmunk/sshfs:latest',
+           'driver_config': 'rasmunk/sshfs:global',
            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
                               'allow_other': '', 'big_writes': ''},
            'source': 'sshvolume-user-{username}',
@@ -30,7 +30,7 @@ mounts = [{'type': 'volume',
 c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0',
              '--NotebookApp.port=8888',
-             '--NotebookApp.allow_origin=http://dag002.science'],
+             '--NotebookApp.allow_origin=http://192.168.99.100'],
     'env': {'JUPYTER_ENABLE_LAB': '1',
             'TZ': 'Europe/Copenhagen'}
 }
@@ -64,7 +64,7 @@ c.JupyterHub.services = [
 # During conjestion, kill random internal processes to limit
 # available load to 1 core/ 2GB mem
 c.SwarmSpawner.resource_spec = {
-    'cpu_limit': int(16 * 1e9),
+    'cpu_limit': int(4 * 1e9),
     'mem_limit': int(8192 * 1e6),
     'cpu_reservation': int(1 * 1e9),
     'mem_reservation': int(1024 * 1e6),
