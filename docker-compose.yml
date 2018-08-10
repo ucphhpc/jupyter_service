@@ -2,6 +2,9 @@ version: '3.2'
 services:
   jupyterhub:
     image: nielsbohr/jupyterhub:devel
+    deploy:
+      placement:
+        constraints: [node.role == manager]
     ports:
        - "80:8000"
     environment:
