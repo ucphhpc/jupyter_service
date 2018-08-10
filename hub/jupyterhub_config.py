@@ -5,14 +5,15 @@ c = get_config()
 c.JupyterHub.spawner_class = 'mig.SwarmSpawner'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
-c.JupyterHub.base_url = '/base_url'
+
+c.JupyterHub.base_url = '/dag'
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
 
-c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service_jupyterhub'
+c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service-devel_jupyterhub'
 
-c.SwarmSpawner.networks = ["jupyter-service_default"]
+c.SwarmSpawner.networks = ["jupyter-service-devel_default"]
 
 notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
@@ -29,7 +30,7 @@ mounts = [{'type': 'volume',
 c.SwarmSpawner.container_spec = {
     'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0',
              '--NotebookApp.port=8888',
-             '--NotebookApp.allow_origin=http://127.0.0.1'],
+             '--NotebookApp.allow_origin=http://dag002.science'],
     'env': {'JUPYTER_ENABLE_LAB': '1',
             'TZ': 'Europe/Copenhagen'}
 }
@@ -40,7 +41,7 @@ c.SwarmSpawner.use_user_options = True
 
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': 'nielsbohr/base-notebook:latest',
+    {'image': 'nielsbohr/base-notebook:devel',
      'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R',
      'mounts': mounts}
 ]
@@ -50,7 +51,7 @@ c.JupyterHub.authenticator_class = 'jhubauthenticators.DummyAuthenticator'
 c.DummyAuthenticator.password = 'password'
 
 # Service that checks for inactive notebooks
-# Defaults to kill services that hasen't been used for 2 hours
+# Defaults to kill services that hasen't been used for 1 hour
 c.JupyterHub.services = [
     {
         'name': 'cull-idle',
@@ -63,7 +64,7 @@ c.JupyterHub.services = [
 # During conjestion, kill random internal processes to limit
 # available load to 1 core/ 2GB mem
 c.SwarmSpawner.resource_spec = {
-    'cpu_limit': int(8 * 1e9),
+    'cpu_limit': int(16 * 1e9),
     'mem_limit': int(8192 * 1e6),
     'cpu_reservation': int(1 * 1e9),
     'mem_reservation': int(1024 * 1e6),
