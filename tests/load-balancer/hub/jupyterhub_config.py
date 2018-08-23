@@ -5,7 +5,7 @@ c = get_config()
 c.JupyterHub.spawner_class = 'mig.SwarmSpawner'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
-c.JupyterHub.base_url = '/base_url'
+c.JupyterHub.base_url = '/jupyter'
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
@@ -41,8 +41,7 @@ c.SwarmSpawner.use_user_options = True
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
     {'image': 'nielsbohr/base-notebook:latest',
-     'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R',
-     'mounts': mounts}
+     'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R'}
 ]
 
 # Authenticator -> remote user header

@@ -3,13 +3,18 @@ configs:
   jupyterhub_config:
     file: ./hub/jupyterhub_config.py
   cull_idle_config:
-    file: ./hub/cull_idle_servers.py
+    file: ../../hub/cull_idle_servers.py
+  apache_config:
+    file: ./apache/httpd.conf
 
 services:
   jupyterhub:
     image: nielsbohr/jupyterhub:latest
+    deploy:
+      placement:
+        constraints: [node.role == manager]
     ports:
-       - "80:8000"
+      - "8000:8000"
     environment:
       TZ: Europe/Copenhagen
     configs:
@@ -28,3 +33,16 @@ services:
       # to launch addtional notebook services from within the service itself
       - /var/run/docker.sock:/var/run/docker.sock:rw
     command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --debug
+  web:
+    image: httpd:latest
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+    ports:
+      - "80:80"
+    environment:
+      TZ: Europe/Copenhagen
+    configs:
+      - source: apache_config
+        target: /usr/local/apache2/conf/httpd.conf
+        mode: 0440
