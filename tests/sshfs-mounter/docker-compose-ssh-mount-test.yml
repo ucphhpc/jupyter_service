@@ -1,9 +1,9 @@
 version: '3.7'
 configs:
   jupyterhub_config:
-    file: ../hub/jupyterhub_config.py
+    file: ./hub/jupyterhub_config.py
   cull_idle_config:
-    file: ../hub/cull_idle_servers.py
+    file: ../../hub/cull_idle_servers.py
 
 services:
   jupyterhub:

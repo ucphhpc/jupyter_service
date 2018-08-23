@@ -10,9 +10,9 @@ c.JupyterHub.base_url = '/base_url'
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
 
-c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service_jupyterhub'
+c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service-devel_jupyterhub'
 
-c.SwarmSpawner.networks = ["jupyter-service_default"]
+c.SwarmSpawner.networks = ["jupyter-service-devel_default"]
 
 notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
@@ -20,8 +20,9 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 mounts = [{'type': 'volume',
            'driver_config': 'rasmunk/sshfs:latest',
            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
+                              'one_time': 'True',
                               'allow_other': '', 'big_writes': ''},
-           'source': 'sshvolume-user-{username}',
+           'source': '',
            'target': notebook_dir
            }]
 
