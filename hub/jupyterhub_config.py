@@ -49,6 +49,7 @@ c.SwarmSpawner.dockerimages = [
 # Authenticator -> remote user header
 c.JupyterHub.authenticator_class = 'jhubauthenticators.DummyAuthenticator'
 c.DummyAuthenticator.password = 'password'
+c.Authenticator.enable_auth_state = True
 
 # Service that checks for inactive notebooks
 # Defaults to kill services that hasen't been used for 1 hour
@@ -64,7 +65,7 @@ c.JupyterHub.services = [
 # During conjestion, kill random internal processes to limit
 # available load to 1 core/ 2GB mem
 c.SwarmSpawner.resource_spec = {
-    'cpu_limit': int(4 * 1e9),
+    'cpu_limit': int(8 * 1e9),
     'mem_limit': int(8192 * 1e6),
     'cpu_reservation': int(1 * 1e9),
     'mem_reservation': int(1024 * 1e6),

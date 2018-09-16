@@ -15,6 +15,9 @@ services:
        - "80:8000"
     environment:
       TZ: Europe/Copenhagen
+      # For JupyterHub auth_state setup
+      # https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html
+      JUPYTERHUB_CRYPT_KEY: ${JUPYTERHUB_CRYPT_KEY}
     configs:
       # Mount both the config file for the jupyterhub server itself and the
       # script that kills idle containers. Furthermore the base-notebook
