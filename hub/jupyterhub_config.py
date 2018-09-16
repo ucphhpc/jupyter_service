@@ -2,9 +2,10 @@ import os
 
 c = get_config()
 
-c.JupyterHub.spawner_class = 'mig.SwarmSpawner'
+c.JupyterHub.spawner_class = 'jhub.SwarmSpawner'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
+
 c.JupyterHub.base_url = '/base_url'
 
 # First pulls can be really slow, so let's give it a big timeout
@@ -20,16 +21,17 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 mounts = [{'type': 'volume',
            'driver_config': 'rasmunk/sshfs:latest',
            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
+                              'one_time': 'True',
                               'allow_other': '', 'big_writes': ''},
-           'source': 'sshvolume-user-{username}',
+           'source': '',
            'target': notebook_dir
            }]
 
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
-    'args': ['/usr/local/bin/start-singleuser.sh', '--NotebookApp.ip=0.0.0.0',
-             '--NotebookApp.port=8888',
-             '--NotebookApp.allow_origin=http://127.0.0.1'],
+    'args': ['/usr/local/bin/start-singleuser.sh',
+             '--NotebookApp.ip=0.0.0.0',
+             '--NotebookApp.port=8888'],
     'env': {'JUPYTER_ENABLE_LAB': '1',
             'TZ': 'Europe/Copenhagen'}
 }
@@ -50,12 +52,12 @@ c.JupyterHub.authenticator_class = 'jhubauthenticators.DummyAuthenticator'
 c.DummyAuthenticator.password = 'password'
 
 # Service that checks for inactive notebooks
-# Defaults to kill services that hasen't been used for 2 hours
+# Defaults to kill services that hasen't been used for 1 hour
 c.JupyterHub.services = [
     {
         'name': 'cull-idle',
         'admin': True,
-        'command': 'python cull_idle_servers.py --timeout=7200'.split(),
+        'command': 'python cull_idle_servers.py --timeout=3600'.split(),
     }
 ]
 

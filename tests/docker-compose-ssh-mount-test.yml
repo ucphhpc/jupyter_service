@@ -1,19 +1,32 @@
-version: '3.2'
+version: '3.7'
+configs:
+  jupyterhub_config:
+    file: ./hub/jupyterhub_config.py
+  cull_idle_config:
+    file: ../../hub/cull_idle_servers.py
+
 services:
   jupyterhub:
     image: nielsbohr/jupyterhub:latest
     environment:
       TZ: Europe/Copenhagen
-    volumes:
+    configs:
       # Mount both the config file for the jupyterhub server itself and the
       # script that kills idle containers. Furthermore the base-notebook
       # notebook image config must be mounted so that jupyterhub has access
       # to it
-      - ../hub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
-      - ../hub/cull_idle_servers.py:/srv/jupyterhub/cull_idle_servers.py:ro
-      # The jupyterhub service needs access to the docker daemon process
-      # to launch additional notebook services from within the service itself
-      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - source: jupyterhub_config
+        target: /etc/jupyterhub/jupyterhub_config.py
+        mode: 0440
+      - source: cull_idle_config
+        target: /srv/jupyterhub/cull_idle_servers.py
+        mode: 0440
+    volumes:
+    # The jupyterhub service needs accces to the docker daemon process
+    # to launch addtional notebook services from within the service itself
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+    command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --debug
+
   ssh-mount-requester:
     depends_on:
       - "ssh-mount-dummy"
