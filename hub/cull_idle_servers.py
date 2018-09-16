@@ -85,7 +85,8 @@ def format_td(td):
 
 
 @coroutine
-def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0, concurrency=10):
+def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0,
+              concurrency=10):
     """Shutdown idle single-user servers
 
     If cull_users, inactive *users* will be deleted as well.
@@ -102,6 +103,7 @@ def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0, concu
 
     if concurrency:
         semaphore = Semaphore(concurrency)
+
         @coroutine
         def fetch(req):
             """client.fetch wrapped in a semaphore to limit concurrency"""
@@ -319,7 +321,8 @@ if __name__ == '__main__':
     define('cull_every', default=0,
            help="The interval (in seconds) for checking for idle servers to cull")
     define('max_age', default=0,
-           help="The maximum age (in seconds) of servers that should be culled even if they are active")
+           help="The maximum age (in seconds) of servers that should be culled"
+                " even if they are active")
     define('cull_users', default=False,
            help="""Cull users in addition to servers.
                 This is for use in temporary-user cases such as tmpnb.""",
@@ -328,7 +331,8 @@ if __name__ == '__main__':
            help="""Limit the number of concurrent requests made to the Hub.
 
                 Deleting a lot of users at the same time can slow down the Hub,
-                so limit the number of API requests we have outstanding at any given time.
+                so limit the number of API requests we have outstanding at any
+                 given time.
                 """
            )
 
