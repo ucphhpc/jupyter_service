@@ -2,7 +2,7 @@ import os
 
 c = get_config()
 
-c.JupyterHub.spawner_class = 'mig.SwarmSpawner'
+c.JupyterHub.spawner_class = 'jhub.SwarmSpawner'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
 c.JupyterHub.base_url = '/jupyter'
@@ -41,7 +41,7 @@ c.SwarmSpawner.use_user_options = True
 
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': 'nielsbohr/base-notebook:latest',
+    {'image': 'nielsbohr/base-notebook:devel',
      'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R'}
 ]
 

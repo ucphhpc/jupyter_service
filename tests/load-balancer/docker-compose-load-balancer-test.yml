@@ -6,6 +6,16 @@ configs:
     file: ../../hub/cull_idle_servers.py
   apache_config:
     file: ./apache/httpd.conf
+  centos_config:
+    file: ./apache/centoshttpd.conf
+  centosmodules_config:
+    file: ./apache/modules.conf
+
+secrets:
+  httpcsr_secret:
+    file: ./apache/ssl/server.crt
+  httpkey_secret:
+    file: ./apache/ssl/server.key
 
 services:
   jupyterhub:
@@ -34,7 +44,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:rw
     command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --debug
   web:
-    image: httpd:latest
+    image: centos/httpd:latest
     deploy:
       placement:
         constraints: [node.role == worker]
@@ -43,6 +53,16 @@ services:
     environment:
       TZ: Europe/Copenhagen
     configs:
-      - source: apache_config
-        target: /usr/local/apache2/conf/httpd.conf
+      - source: centos_config
+        target: /etc/httpd/conf/httpd.conf
         mode: 0440
+      - source: centosmodules_config
+        target: /etc/httpd/conf.modules.d/modules.conf
+        mode: 0440
+    #secrets:
+    #  - source: httpcsr_secret
+    #    target: /usr/local/apache2/conf/server.crt
+    #    mode: 0440
+    #  - source: httpkey_secret
+    #    target: /usr/local/apache2/conf/server.key
+    #    mode: 0440
