@@ -3,7 +3,7 @@ services: docker
 language: python
 python: '3.6'
 before_install:
-- cd tests/jupyterhub-sshfs-mounter
+- cd tests/sshfs-mounter
 - sudo apt-get update
 - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 env:
