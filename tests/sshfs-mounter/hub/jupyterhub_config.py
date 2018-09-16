@@ -5,13 +5,12 @@ c = get_config()
 c.JupyterHub.spawner_class = 'jhub.SwarmSpawner'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
-
-c.JupyterHub.base_url = '/base_url'
+c.JupyterHub.base_url = '/jupyter'
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
 
-c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service-jupyterhub'
+c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service_jupyterhub'
 
 c.SwarmSpawner.networks = ["jupyter-service_default"]
 
@@ -51,7 +50,7 @@ c.JupyterHub.authenticator_class = 'jhubauthenticators.DummyAuthenticator'
 c.DummyAuthenticator.password = 'password'
 
 # Service that checks for inactive notebooks
-# Defaults to kill services that hasen't been used for 1 hour
+# Defaults to kill services that hasen't been used for 2 hours
 c.JupyterHub.services = [
     {
         'name': 'cull-idle',
@@ -64,7 +63,7 @@ c.JupyterHub.services = [
 # During conjestion, kill random internal processes to limit
 # available load to 1 core/ 2GB mem
 c.SwarmSpawner.resource_spec = {
-    'cpu_limit': int(4 * 1e9),
+    'cpu_limit': int(8 * 1e9),
     'mem_limit': int(8192 * 1e6),
     'cpu_reservation': int(1 * 1e9),
     'mem_reservation': int(1024 * 1e6),

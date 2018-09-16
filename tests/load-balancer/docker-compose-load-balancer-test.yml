@@ -3,7 +3,19 @@ configs:
   jupyterhub_config:
     file: ./hub/jupyterhub_config.py
   cull_idle_config:
-    file: ./hub/cull_idle_servers.py
+    file: ../../hub/cull_idle_servers.py
+  apache_config:
+    file: ./apache/httpd.conf
+  centos_config:
+    file: ./apache/centoshttpd.conf
+  centosmodules_config:
+    file: ./apache/modules.conf
+
+secrets:
+  httpcsr_secret:
+    file: ./apache/ssl/server.crt
+  httpkey_secret:
+    file: ./apache/ssl/server.key
 
 services:
   jupyterhub:
@@ -12,7 +24,7 @@ services:
       placement:
         constraints: [node.role == manager]
     ports:
-       - "80:8000"
+      - "8000:8000"
     environment:
       TZ: Europe/Copenhagen
     configs:
@@ -30,12 +42,27 @@ services:
       # The jupyterhub service needs accces to the docker daemon process
       # to launch addtional notebook services from within the service itself
       - /var/run/docker.sock:/var/run/docker.sock:rw
-    command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
-  docker-volume-monitor:
-    image: rasmunk/docker-volume-monitor
+    command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --debug
+  web:
+    image: centos/httpd:latest
     deploy:
-      mode: global
+      placement:
+        constraints: [node.role == worker]
+    ports:
+      - "80:80"
     environment:
       TZ: Europe/Copenhagen
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: centos_config
+        target: /etc/httpd/conf/httpd.conf
+        mode: 0440
+      - source: centosmodules_config
+        target: /etc/httpd/conf.modules.d/modules.conf
+        mode: 0440
+    #secrets:
+    #  - source: httpcsr_secret
+    #    target: /usr/local/apache2/conf/server.crt
+    #    mode: 0440
+    #  - source: httpkey_secret
+    #    target: /usr/local/apache2/conf/server.key
+    #    mode: 0440
