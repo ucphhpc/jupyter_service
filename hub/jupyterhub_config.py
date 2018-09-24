@@ -1,4 +1,5 @@
 import os
+from jhub.mount import SSHFSMounter
 
 c = get_config()
 
@@ -18,14 +19,15 @@ c.SwarmSpawner.networks = ["jupyter-service_default"]
 notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
-mounts = [{'type': 'volume',
-           'driver_config': 'rasmunk/sshfs:latest',
-           'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
-                              'one_time': 'True',
-                              'allow_other': '', 'big_writes': ''},
-           'source': '',
-           'target': notebook_dir
-           }]
+mounts = [SSHFSMounter({
+            'type': 'volume',
+            'driver_config': 'rasmunk/sshfs:latest',
+            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
+                               'one_time': 'True',
+                               'big_writes': '', 'allow_other': ''},
+            'source': '',
+            'target': notebook_dir})]
+
 
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
@@ -43,7 +45,8 @@ c.SwarmSpawner.use_user_options = True
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
     {'image': 'nielsbohr/base-notebook:latest',
-     'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R'}
+     'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R',
+     'mounts': mounts}
 ]
 
 # Authenticator -> remote user header
