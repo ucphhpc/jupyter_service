@@ -41,4 +41,12 @@ services:
     environment:
       TZ: Europe/Copenhagen
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
+  docker-image-updater:
+    image: rasmunk/docker-image-updater
+    deploy:
+      mode: global
+    environment:
+      TZ: Europe/Copenhagen
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
