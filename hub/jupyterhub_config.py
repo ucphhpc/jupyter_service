@@ -4,6 +4,7 @@ from jhub.mount import SSHFSMounter
 c = get_config()
 
 c.JupyterHub.spawner_class = 'jhub.SwarmSpawner'
+
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
 
@@ -12,7 +13,7 @@ c.JupyterHub.base_url = '/base_url'
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
 
-c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service-jupyterhub'
+c.SwarmSpawner.jupyterhub_service_name = 'jupyter-service_jupyterhub'
 
 c.SwarmSpawner.networks = ["jupyter-service_default"]
 
@@ -60,7 +61,7 @@ c.JupyterHub.services = [
     {
         'name': 'cull-idle',
         'admin': True,
-        'command': 'python cull_idle_servers.py --timeout=3600'.split(),
+        'command': 'python3 cull_idle_servers.py --timeout=3600'.split(),
     }
 ]
 

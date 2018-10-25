@@ -1,30 +1,21 @@
 #!/usr/bin/env python3
 """script to monitor and cull idle single-user servers
-
 Caveats:
-
 last_activity is not updated with high frequency,
 so cull timeout should be greater than the sum of:
-
 - single-user websocket ping interval (default: 30s)
 - JupyterHub.last_activity_interval (default: 5 minutes)
-
 You can run this as a service managed by JupyterHub with this in your config::
-
-
     c.JupyterHub.services = [
         {
             'name': 'cull-idle',
             'admin': True,
-            'command': 'python3 cull_idle_servers.py --timeout=3600'.split(),
+            'command': [sys.executable, 'cull_idle_servers.py', '--timeout=3600'],
         }
     ]
-
 Or run it manually by generating an API token and storing it in `JUPYTERHUB_API_TOKEN`:
-
-    export JUPYTERHUB_API_TOKEN=`jupyterhub token`
+    export JUPYTERHUB_API_TOKEN=$(jupyterhub token)
     python3 cull_idle_servers.py [--timeout=900] [--url=http://127.0.0.1:8081/hub/api]
-
 This script uses the same ``--timeout`` and ``--max-age`` values for
 culling users and users' servers.  If you want a different value for
 users and servers, you should add this script to the services list
@@ -54,9 +45,7 @@ from tornado.options import define, options, parse_command_line
 
 def parse_date(date_string):
     """Parse a timestamp
-
     If it doesn't have a timezone, assume utc
-
     Returned datetime object will always be timezone-aware
     """
     dt = dateutil.parser.parse(date_string)
@@ -69,7 +58,6 @@ def parse_date(date_string):
 def format_td(td):
     """
     Nicely format a timedelta object
-
     as HH:MM:SS
     """
     if td is None:
@@ -85,10 +73,9 @@ def format_td(td):
 
 
 @coroutine
-def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0,
-              concurrency=10):
+def cull_idle(url, api_token, inactive_limit, protected_users, cull_users=False,
+              max_age=0, concurrency=10):
     """Shutdown idle single-user servers
-
     If cull_users, inactive *users* will be deleted as well.
     """
     auth_header = {
@@ -122,7 +109,6 @@ def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0,
     @coroutine
     def handle_server(user, server_name, server):
         """Handle (maybe) culling a single server
-
         Returns True if server is now stopped (user removable),
         False otherwise.
         """
@@ -212,7 +198,6 @@ def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0,
     @coroutine
     def handle_user(user):
         """Handle one user.
-
         Create a list of their servers, and async exec them.  Wait for
         that to be done, and if all servers are stopped, possibly cull
         the user.
@@ -298,6 +283,11 @@ def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0,
         yield fetch(req)
         return True
 
+    # Don't kill protected servers
+    if protected_users is not None:
+        p_users = protected_users.split(',')
+        users = [user for user in users if user['name'] not in p_users]
+
     for user in users:
         futures.append((user['name'], handle_user(user)))
 
@@ -320,19 +310,19 @@ if __name__ == '__main__':
     define('timeout', default=600, help="The idle timeout (in seconds)")
     define('cull_every', default=0,
            help="The interval (in seconds) for checking for idle servers to cull")
+    define('protected_users', default=None, help="List of users that shouldn't "
+                                                 "have their servers killed")
     define('max_age', default=0,
-           help="The maximum age (in seconds) of servers that should be culled"
-                " even if they are active")
+           help="The maximum age (in seconds) of servers that should "
+                "be culled even if they are active")
     define('cull_users', default=False,
            help="""Cull users in addition to servers.
                 This is for use in temporary-user cases such as tmpnb.""",
            )
     define('concurrency', default=10,
            help="""Limit the number of concurrent requests made to the Hub.
-
                 Deleting a lot of users at the same time can slow down the Hub,
-                so limit the number of API requests we have outstanding at any
-                 given time.
+                so limit the number of API requests we have outstanding at any given time.
                 """
            )
 
@@ -358,6 +348,7 @@ if __name__ == '__main__':
         cull_users=options.cull_users,
         max_age=options.max_age,
         concurrency=options.concurrency,
+        protected_users=options.protected_users,
     )
     # schedule first cull immediately
     # because PeriodicCallback doesn't start until the end of the first interval
