@@ -286,7 +286,8 @@ def cull_idle(url, api_token, inactive_limit, protected_users, cull_users=False,
     # Don't kill protected servers
     if protected_users is not None:
         p_users = protected_users.split(',')
-        users = [user for user in users if user['name'] not in p_users]
+        users = [user for user in users if user['name'] not in p_users
+                 or hasattr(user, 'real_name') and user['real_name'] not in p_users]
 
     for user in users:
         futures.append((user['name'], handle_user(user)))
