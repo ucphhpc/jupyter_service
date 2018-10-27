@@ -23,6 +23,7 @@ twice, just with different ``name``s, different values, and one with
 the ``--cull-users`` option.
 """
 
+from base64 import b32decode
 from datetime import datetime, timezone
 from functools import partial
 import json
@@ -34,13 +35,34 @@ except ImportError:
     from urllib import quote
 
 import dateutil.parser
-
 from tornado.gen import coroutine, multi
 from tornado.locks import Semaphore
 from tornado.log import app_log
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.ioloop import IOLoop, PeriodicCallback
 from tornado.options import define, options, parse_command_line
+
+
+def safeinput_decode(input_str):
+    """
+    :param input_str: expects a b32encoded utf-8 string
+    :return: a decoded utf-8 string
+    """
+    input_str = input_str.upper()
+    # Encoder removed "=" padding to satisfy validate_input
+    # Pad with "="" according to:
+    # https://tools.ietf.org/html/rfc3548 :
+    # (1) the final quantum of encoding input is an integral multiple of 40
+    # bits; here, the final unit of encoded output will be an integral
+    # multiple of 8 characters with no "=" padding.
+    if len(input_str) % 8 != 0:
+        padlen = 8 - (len(input_str) % 8)
+        padding = "".join('=' for i in range(padlen))
+        decode_str = "{}{}".format(input_str, padding)
+    else:
+        decode_str = input_str
+
+    return str(b32decode(bytes(decode_str, 'utf-8')), 'utf-8')
 
 
 def parse_date(date_string):
@@ -287,7 +309,7 @@ def cull_idle(url, api_token, inactive_limit, protected_users, cull_users=False,
     if protected_users is not None:
         p_users = protected_users.split(',')
         users = [user for user in users if user['name'] not in p_users
-                 or hasattr(user, 'real_name') and user['real_name'] not in p_users]
+                 and safeinput_decode(user['name']) not in p_users]
 
     for user in users:
         futures.append((user['name'], handle_user(user)))

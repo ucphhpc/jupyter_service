@@ -50,3 +50,4 @@ services:
       TZ: Europe/Copenhagen
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    command: -update nielsbohr/base-notebook
