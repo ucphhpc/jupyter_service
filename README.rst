@@ -55,7 +55,7 @@ In addition it requires that the jupyterhub service is deployed on a swarm manag
 See `Create a swarm <https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm>`_.
 Hence the restriction set in the docker-compose file that the jupyterhub service is restricted to a manager node.
 
-By default the example also provides defines an `docker-image-updater <https://github.com/rasmunk/docker-image-updater>`_ service.
+By default the example/basic_docker-compose.yml stack also provides an `docker-image-updater <https://github.com/rasmunk/docker-image-updater>`_ service.
 This service provides a continuously monitor whether new versions of the specified notebook image is available,
 and if so pulls it to every swarm node and prunes previous versions when no other running notebook depends on that particular version.
 
