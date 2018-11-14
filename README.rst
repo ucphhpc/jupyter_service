@@ -75,5 +75,5 @@ do::
     docker stack ls
     docker services ls
 
-The stack command should return that 2 services are running, i.e. the jupyterhub and image-updater service.
-Beyond that, the``services`` call should return the 2 services are preparing/running.
+The ``stack`` command should return that the jupyter-service stacks is running with 2 services, i.e. the jupyterhub and image-updater service.
+Beyond that, the ``services`` call should return the 2 individual services are preparing/running.
