@@ -18,15 +18,14 @@ jupyter_service interconnects can be seen below:
 
 TODO: update architecture image
 
-The stack is made of a 2 layered docker service stack, i.e. any external
-request is received by the jupyterhub service.
+The stack is made of a 2 layered docker swarm stack, i.e. any external
+request is received by the jupyterhub service which handles whether a user is allow to start a notebook.
 
-
-As defined by `Authenticators <https://jupyterhub.readthedocs.io/en/stable/
-reference/authenticators.html>`_ Jupyterhub allows for a custom
-authenticator to be enabled. Hence whether requests needs to be authenticated to
-launch notebooks via the jupyterhub web interface,
-depends on which ``authenticator_class`` is defined in
+This is defined by `Authenticators <https://jupyterhub.readthedocs.io/en/stable/
+reference/authenticators.html>`_ where Jupyterhub allows for a custom
+authenticator to be selected based on the local requirements.
+Hence how a user should be authenticated before they are able to launch notebooks via the jupyterhub web interface.
+The authenticator itself is selected by defining the ``authenticator_class`` variable as shown in
 the example/jupyterhub_config.py configuration file.
 
 Beyond authentication, jupyterhub also allows for a custom `Spawner <https://jupyterhub.readthedocs.io/en/stable/reference/spawners.html>`_
