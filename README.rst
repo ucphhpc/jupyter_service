@@ -29,7 +29,8 @@ launch notebooks via the jupyterhub web interface,
 depends on which ``authenticator_class`` is defined in
 the example/jupyterhub_config.py configuration file.
 
-Beyond authentication, jupyterhub also allows for a custom spawner scheme to be overloaded.
+Beyond authentication, jupyterhub also allows for a custom `Spawner <https://jupyterhub.readthedocs.io/en/stable/reference/spawners.html>`_
+scheme to be overloaded.
 The default ``spawner_class`` in the example/jupyterhub_config.py configuration file
 is defined with the `jhub-swarmspawner <https://github.com/rasmunk/SwarmSpawner>`_ which enables the deployment of
 jupyter notebooks on a `Docker Swarm Cluster <https://github.com/docker/swarmkit>`_
