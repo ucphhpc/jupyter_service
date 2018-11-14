@@ -1,5 +1,4 @@
 import os
-from jhub.mount import SSHFSMounter
 
 c = get_config()
 
