@@ -30,6 +30,10 @@ services:
       # The jupyterhub service needs accces to the docker daemon process
       # to launch addtional notebook services from within the service itself
       - /var/run/docker.sock:/var/run/docker.sock:rw
+      # Keep the jhub states such as the db saved during restarts
+      - type: volume
+        source: jhubstate
+        target: /srv/jupyterhub
     command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
   docker-image-updater:
     image: rasmunk/docker-image-updater
@@ -40,3 +44,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: -update nielsbohr/base-notebook
+
+volumes:
+  jhubstate:

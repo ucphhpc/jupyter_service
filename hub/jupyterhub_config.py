@@ -58,12 +58,12 @@ c.DummyAuthenticator.password = 'password'
 c.Authenticator.enable_auth_state = True
 
 # Service that checks for inactive notebooks
-# Defaults to kill services that hasen't been used for 1 hour
+# Defaults to kill services that hasen't been used for 2 hour
 c.JupyterHub.services = [
     {
         'name': 'cull-idle',
         'admin': True,
-        'command': 'python3 cull_idle_servers.py --timeout=3600'.split(),
+        'command': 'python3 cull_idle_servers.py --timeout=7200'.split(),
     }
 ]
 
