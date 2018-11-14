@@ -1,9 +1,9 @@
 version: '3.7'
 configs:
   jupyterhub_config:
-    file: ./hub/jupyterhub_config.py
+    file: ./basic_jupyterhub_config.py
   cull_idle_config:
-    file: ./hub/cull_idle_servers.py
+    file: ../hub/cull_idle_servers.py
 
 services:
   jupyterhub:
@@ -15,11 +15,6 @@ services:
        - "80:8000"
     environment:
       TZ: Europe/Copenhagen
-      # Required when the 'auth_state' flag is enabled
-      # means that the 'hub/setup_jup_crypt_secret.sh script
-      # must be sources before the stack is deployed
-      # https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html
-      JUPYTERHUB_CRYPT_KEY: ${JUPYTERHUB_CRYPT_KEY}
     configs:
       # Mount both the config file for the jupyterhub server itself and the
       # script that kills idle containers. Furthermore the base-notebook
@@ -36,14 +31,6 @@ services:
       # to launch addtional notebook services from within the service itself
       - /var/run/docker.sock:/var/run/docker.sock:rw
     command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
-  docker-volume-monitor:
-    image: rasmunk/docker-volume-monitor
-    deploy:
-      mode: global
-    environment:
-      TZ: Europe/Copenhagen
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   docker-image-updater:
     image: rasmunk/docker-image-updater
     deploy:

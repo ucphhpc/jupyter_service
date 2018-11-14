@@ -16,48 +16,57 @@ Architecture
 An overview of how the different components of the
 jupyter_service interconnects can be seen below:
 
-.. image:: docs/jupyter-service.jpg
-   :width: 40pt
+TODO: update i
 
-The stack is made of a 3 layered docker service stack, i.e. any external
-request is received by the Nginx front proxy service. This forwards any
-request to the jupyterhub upstream nginx pool via the overlay virtual
-``jupyter-service_default`` network.
+The stack is made of a 2 layered docker service stack, i.e. any external
+request is received by the jupyterhub service.
 
 
-Whether requests needs to be authenticated to launch notebooks via the
-jupyterhub web interface, depends on which ``authenticator_class`` is defined in
-the hub/jupyterhub_config.py configuration file.
+As defined by `Authenticators <https://jupyterhub.readthedocs.io/en/stable/
+reference/authenticators.html>`_ Jupyterhub allows for a custom
+authenticator to be enabled. Hence whether requests needs to be authenticated to
+launch notebooks via the jupyterhub web interface,
+depends on which ``authenticator_class`` is defined in
+the example/jupyterhub_config.py configuration file.
 
-The default ``spawner_class`` for the jupyterhub service is setup to launch
-separate docker service notebooks when a user makes a 'spawn' request.
+Beyond authentication, jupyterhub also allows for a custom spawner scheme to be overloaded.
+The default ``spawner_class`` in the example/jupyterhub_config.py configuration file
+is defined with the `jhub-swarmspawner <https://github.com/rasmunk/SwarmSpawner>`_ which enables the deployment of
+jupyter notebooks on a `Docker Swarm Cluster <https://github.com/docker/swarmkit>`_
+cluster whenever a user requests a new notebook.
 
 -------------
 Prerequisites
 -------------
 
-Before the jupyterhub service is able to launch seperate notebook services,
+Before the jupyterhub service is able to launch separate notebook services,
 jupyterhub needs access to the hosts docker daemon process. This access can
 be gained in a number of ways, one of which is to mount the /var/run/docker
 .sock file inside the jupyterhub service as a volume and then ensuring that
 the user that executes the ``deploy`` command is part of the ``docker`` system
-group. This is the default approach as set in the docker-compose.yml file.
+group. This is the default approach as defined in the docker-compose.yml file.
 
 Another approach would be to expose the docker daemon remotely on port 2376
 with TLS verification as explained @ `Docker Docs <https://docs.docker
 .com/engine/reference/commandline/dockerd/#description>`_ under "Daemon
 socket option".
 
-In addition it requires that the host is an initialized swarm manager. see `Create a swarm <https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm>`_
+In addition it requires that the jupyterhub service is deployed on a swarm manager node.
+See `Create a swarm <https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm>`_.
+Hence the restriction set in the docker-compose file that the jupyterhub service is restricted to a manager node.
+
+By default the example also provides defines an `docker-image-updater <https://github.com/rasmunk/docker-image-updater>`_ service.
+This service provides a continuously monitor whether new versions of the specified notebook image is available,
+and if so pulls it to every swarm node and prunes previous versions when no other running notebook depends on that particular version.
 
 ---------------------
 Launching the Service
 ---------------------
 
-To run this stack, simply execute the following command inside the repo
+To run a basic stack, simply execute the following command inside the repo
 directory::
 
-    docker stack deploy --compose-file docker-compose.yml jupyter-service
+    docker stack deploy --compose-file example/basic_docker-compose.yml jupyter-service
 
 
 To verify that the stack is now deployed and the services are being spawned
@@ -66,7 +75,5 @@ do::
     docker stack ls
     docker services ls
 
-The stack command should return that 2 services are running, in addition the
-``services`` call should return that the jupyterhub and nginx service is
-running/preparing to run. In addition it describes which ports the service
-is accessible through the nginx front proxy via either port 80/443.
+The stack command should return that 2 services are running, i.e. the jupyterhub and image-updater service.
+Beyond that, the``services`` call should return the 2 services are preparing/running.

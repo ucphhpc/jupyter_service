@@ -53,6 +53,8 @@ c.SwarmSpawner.dockerimages = [
 # Authenticator -> remote user header
 c.JupyterHub.authenticator_class = 'jhubauthenticators.DummyAuthenticator'
 c.DummyAuthenticator.password = 'password'
+
+# Pass the encoded username to the spawner
 c.Authenticator.enable_auth_state = True
 
 # Service that checks for inactive notebooks
