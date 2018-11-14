@@ -26,11 +26,11 @@ reference/authenticators.html>`_ where Jupyterhub allows for a custom
 authenticator to be selected based on the local requirements.
 Hence how a user should be authenticated before they are able to launch notebooks via the jupyterhub web interface.
 The authenticator itself is selected by defining the ``authenticator_class`` variable as shown in
-the example/jupyterhub_config.py configuration file.
+the example/basic_jupyterhub_config.py configuration file.
 
 Beyond authentication, jupyterhub also allows for a custom `Spawner <https://jupyterhub.readthedocs.io/en/stable/reference/spawners.html>`_
 scheme to be overloaded.
-The default ``spawner_class`` in the example/jupyterhub_config.py configuration file
+The default ``spawner_class`` in the example/basic_jupyterhub_config.py configuration file
 is defined with the `jhub-swarmspawner <https://github.com/rasmunk/SwarmSpawner>`_ which enables the deployment of
 jupyter notebooks on a `Docker Swarm Cluster <https://github.com/docker/swarmkit>`_
 cluster whenever a user requests a new notebook.
