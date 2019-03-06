@@ -305,9 +305,22 @@ def cull_idle(url, api_token, inactive_limit, protected_users, cull_users=False,
         yield fetch(req)
         return True
 
+    p_users = []
     # Don't kill protected servers
     if protected_users is not None:
-        p_users = protected_users.split(',')
+        # Check if the users are stored in a file
+        if os.path.exists(protected_users):
+            db_path = protected_users
+            try:
+                app_log.info("Cull, checking db {} "
+                             "for users".format(db_path))
+                with open(db_path, 'r') as db:
+                    p_users = [user.rstrip('\n').rstrip('\r\n') for user in db]
+            except IOError as err:
+                app_log.error("Cull, tried to open db file {},"
+                              "Failed {}".format(db_path, err))
+        else:
+            p_users = protected_users.split(',')
         users = [user for user in users if user['name'] not in p_users
                  and safeinput_decode(user['name']) not in p_users]
 
