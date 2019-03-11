@@ -73,7 +73,7 @@ To verify that the stack is now deployed and the services are being spawned
 do::
 
     docker stack ls
-    docker services ls
+    docker service ls
 
 The ``stack`` command should return that the jupyter-service stacks is running with 2 services, i.e. the jupyterhub and image-updater service.
 Beyond that, the ``services`` call should return the 2 individual services are preparing/running.
