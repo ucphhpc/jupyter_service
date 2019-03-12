@@ -2,8 +2,7 @@
 jupyter_service
 ===================
 
-A jupyter notebook docker swarm setup that consists of a standard proxy nginx
-and a customised jupyterhub service that spawns individual notebooks for
+A jupyter notebook docker swarm setup that consists of a customised jupyterhub service that spawns individual notebooks for
 individual users.
 
 - `NBI Jupyterhub <https://github.com/rasmunk/docker-nbi-jupyterhub.git>`_
