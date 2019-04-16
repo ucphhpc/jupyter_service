@@ -46,8 +46,8 @@ c.SwarmSpawner.use_user_options = True
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
     {'image': 'nielsbohr/base-notebook:latest',
-     'name': 'Image with automatic {replace_me} mount, supports Py2/3 and R',
-     'mounts': mounts}
+     'name': 'Base Image'
+     }
 ]
 
 # Authenticator -> remote user header
@@ -63,7 +63,7 @@ c.JupyterHub.services = [
     {
         'name': 'cull-idle',
         'admin': True,
-        'command': 'python3 cull_idle_servers.py --timeout=7200'.split(),
+        'command': "python3 cull_idle_servers.py --timeout=7200".split(),
     }
 ]
 
