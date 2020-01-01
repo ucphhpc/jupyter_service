@@ -12,11 +12,6 @@ individual users.
 Architecture
 ------------
 
-An overview of how the different components of the
-jupyter_service interconnects can be seen below:
-
-TODO: update architecture image
-
 The stack is made of a 2 layered docker swarm stack, i.e. any external
 request is received by the jupyterhub service which handles whether a user is allow to start a notebook.
 
