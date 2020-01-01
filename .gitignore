@@ -101,3 +101,9 @@ ENV/
 .mypy_cache/
 .idea/
 .DS_Store
+
+
+# Credential files
+*.key
+*.crt
+*.csr
