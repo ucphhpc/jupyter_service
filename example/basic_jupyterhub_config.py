@@ -22,9 +22,6 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
-    'args': ['/usr/local/bin/start-singleuser.sh',
-             '--NotebookApp.ip=0.0.0.0',
-             '--NotebookApp.port=8888'],
     'env': {'JUPYTER_ENABLE_LAB': '1'}
 }
 
@@ -34,7 +31,7 @@ c.SwarmSpawner.use_user_options = True
 
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': 'nielsbohr/base-notebook:latest',
+    {'image': 'jupyter/base-notebook:latest',
      'name': 'Basic Python Notebook'}
 ]
 
