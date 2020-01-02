@@ -1,6 +1,4 @@
 import os
-from jhub.mount import SSHFSMounter
-
 c = get_config()
 
 c.JupyterHub.spawner_class = 'jhub.SwarmSpawner'
@@ -20,23 +18,9 @@ c.SwarmSpawner.networks = ["jupyter-service_default"]
 notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
-mounts = [SSHFSMounter({
-            'type': 'volume',
-            'driver_config': 'rasmunk/sshfs:latest',
-            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
-                               'one_time': 'True',
-                               'big_writes': '', 'allow_other': ''},
-            'source': '',
-            'target': notebook_dir})]
-
-
 # 'args' is the command to run inside the service
 c.SwarmSpawner.container_spec = {
-    'args': ['/usr/local/bin/start-singleuser.sh',
-             '--NotebookApp.ip=0.0.0.0',
-             '--NotebookApp.port=8888'],
-    'env': {'JUPYTER_ENABLE_LAB': '1',
-            'TZ': 'Europe/Copenhagen'}
+    'env': {'JUPYTER_ENABLE_LAB': '1'}
 }
 
 # Before the user can select which image to spawn,
@@ -45,8 +29,8 @@ c.SwarmSpawner.use_user_options = True
 
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': 'nielsbohr/base-notebook:latest',
-     'name': 'Base Image'
+    {'image': 'jupyter/base-notebook:latest',
+     'name': 'Jupyter Notebook'
      }
 ]
 
