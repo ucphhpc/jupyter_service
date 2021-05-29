@@ -36,7 +36,7 @@ services:
         target: /srv/jupyterhub
     command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
   docker-image-updater:
-    image: rasmunk/docker-image-updater
+    image: nielsbohr/docker-image-updater
     deploy:
       mode: global
     environment:

@@ -18,7 +18,7 @@ notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
 mounts = [{'type': 'volume',
-           'driver_config': 'rasmunk/sshfs:latest',
+           'driver_config': 'nielsbohr/sshfs:latest',
            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
                               'one_time': 'True',
                               'allow_other': '', 'big_writes': ''},

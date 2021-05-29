@@ -5,7 +5,7 @@ jupyter_service
 A jupyter notebook docker swarm setup that consists of a customised jupyterhub service that spawns individual notebooks for
 individual users.
 
-- `NBI Jupyterhub <https://github.com/rasmunk/docker-nbi-jupyterhub.git>`_
+- `NBI Jupyterhub <https://github.com/nielsbohr/docker-nbi-jupyterhub.git>`_
 
 
 ------------
@@ -25,7 +25,7 @@ the example/basic_jupyterhub_config.py configuration file.
 Beyond authentication, jupyterhub also allows for a custom `Spawner <https://jupyterhub.readthedocs.io/en/stable/reference/spawners.html>`_
 scheme to be overloaded.
 The default ``spawner_class`` in the example/basic_jupyterhub_config.py configuration file
-is defined with the `jhub-swarmspawner <https://github.com/rasmunk/SwarmSpawner>`_ which enables the deployment of
+is defined with the `jhub-swarmspawner <https://github.com/ucphhpc/SwarmSpawner>`_ which enables the deployment of
 jupyter notebooks on a `Docker Swarm Cluster <https://github.com/docker/swarmkit>`_
 cluster whenever a user requests a new notebook.
 
@@ -49,7 +49,7 @@ In addition it requires that the jupyterhub service is deployed on a swarm manag
 See `Create a swarm <https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm>`_.
 Hence the restriction set in the docker-compose file that the jupyterhub service is restricted to a manager node.
 
-By default the example/basic_docker-compose.yml stack also provides an `docker-image-updater <https://github.com/rasmunk/docker-image-updater>`_ service.
+By default the example/basic_docker-compose.yml stack also provides an `docker-image-updater <https://github.com/ucphhpc/docker-image-updater>`_ service.
 This service provides a continuously monitor whether new versions of the specified notebook image is available,
 and if so pulls it to every swarm node and prunes previous versions when no other running notebook depends on that particular version.
 
