@@ -6,20 +6,21 @@ configs:
     file: ./hub/cull_idle_servers.py
 
 services:
+  proxy:
+    image: jupyterhub/configurable-http-proxy
+    env_file:
+      - .env
+    command:
+      configurable-http-proxy --ip=jupyter-service_proxy --port=8000 --api-ip=jupyter-service_proxy --api-port=8001 --default-target=http://jupyter-service_jupyterhub:8081 --error-target=http://jupyter-service_jupyterhub:8081/hub/error
   jupyterhub:
-    image: nielsbohr/jupyterhub:edge
+    image: nielsbohr/jupyterhub:latest
     deploy:
       placement:
         constraints: [node.role == manager]
     ports:
        - "80:8000"
-    environment:
-      TZ: Europe/Copenhagen
-      # Required when the 'auth_state' flag is enabled
-      # means that the 'hub/setup_jup_crypt_secret.sh script
-      # must be sources before the stack is deployed
-      # https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html
-      JUPYTERHUB_CRYPT_KEY: ${JUPYTERHUB_CRYPT_KEY}
+    env_file:
+      - .env
     configs:
       # Mount both the config file for the jupyterhub server itself and the
       # script that kills idle containers. Furthermore the base-notebook
@@ -39,7 +40,8 @@ services:
       - type: volume
         source: jhubstate
         target: /srv/jupyterhub
-    command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
+    # command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
+    command: sleep 6000
   docker-volume-monitor:
     image: nielsbohr/docker-volume-monitor:latest
     deploy:
