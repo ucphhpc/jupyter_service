@@ -8,19 +8,23 @@ configs:
 services:
   proxy:
     image: jupyterhub/configurable-http-proxy
-    env_file:
-      - .env
+    environment:
+      CONFIGPROXY_AUTH_TOKEN: "${CONFIGPROXY_AUTH_TOKEN}"
+      TZ: ${TZ}
+    ports:
+      - "80:8000"
     command:
-      configurable-http-proxy --ip=jupyter-service_proxy --port=8000 --api-ip=jupyter-service_proxy --api-port=8001 --default-target=http://jupyter-service_jupyterhub:8081 --error-target=http://jupyter-service_jupyterhub:8081/hub/error
+      configurable-http-proxy --default-target=http://jupyterhub:8000 --error-target=http://jupyterhub:8000/hub/error
+
   jupyterhub:
     image: nielsbohr/jupyterhub:latest
     deploy:
       placement:
         constraints: [node.role == manager]
-    ports:
-       - "80:8000"
-    env_file:
-      - .env
+    environment:
+      JUPYTERHUB_CRYPT_KEY: "${JUPYTERHUB_CRYPT_KEY}"
+      CONFIGPROXY_AUTH_TOKEN: "${CONFIGPROXY_AUTH_TOKEN}"
+      TZ: ${TZ}
     configs:
       # Mount both the config file for the jupyterhub server itself and the
       # script that kills idle containers. Furthermore the base-notebook
@@ -40,8 +44,8 @@ services:
       - type: volume
         source: jhubstate
         target: /srv/jupyterhub
-    # command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
-    command: sleep 6000
+    command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
+
   docker-volume-monitor:
     image: nielsbohr/docker-volume-monitor:latest
     deploy:
@@ -50,6 +54,7 @@ services:
       TZ: Europe/Copenhagen
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
   docker-image-updater:
     image: nielsbohr/docker-image-updater:latest
     deploy:

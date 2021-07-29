@@ -60,7 +60,8 @@ Launching the Service
 To run a basic stack, simply execute the following command inside the repo
 directory::
 
-    docker stack deploy --compose-file example/basic_docker-compose.yml jupyter-service
+    source hub/setup_runtime_secrets.sh
+    docker stack deploy --compose-file <(docker-compose config) jupyter-service
 
 
 To verify that the stack is now deployed and the services are being spawned
@@ -69,5 +70,4 @@ do::
     docker stack ls
     docker service ls
 
-The ``stack`` command should return that the jupyter-service stacks is running with 2 services, i.e. the jupyterhub and image-updater service.
-Beyond that, the ``services`` call should return the 2 individual services are preparing/running.
+The ``stack`` command should return that the jupyter-service stacks is running with 4 services, i.e. the jupyterhub, the proxy, the volume-remove, and image-updater services.

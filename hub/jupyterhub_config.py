@@ -5,18 +5,19 @@ c.JupyterHub.spawner_class = 'jhub.SwarmSpawner'
 
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
+# IP as seen on the docker network. Can also be a hostname.
+c.JupyterHub.hub_connect_ip = "jupyterhub"
 
 c.JupyterHub.base_url = '/base_url'
+
+c.JupyterHub.port = 8000
 
 # Config required to seperate the proxy from JupyterHub
 c.JupyterHub.cleanup_servers = False
 
 c.ConfigurableHTTPProxy.should_start = False
 
-c.ConfigurableHTTPProxy.auth_token = "CONFIGPROXY_AUTH_TOKEN"
-
-c.ConfigurableHTTPProxy.api_url = 'http://jupyter-service_proxy:8001'
-
+c.ConfigurableHTTPProxy.api_url = 'http://proxy:8001'
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
