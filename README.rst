@@ -53,6 +53,19 @@ By default the example/basic_docker-compose.yml stack also provides an `docker-i
 This service provides a continuously monitor whether new versions of the specified notebook image is available,
 and if so pulls it to every swarm node and prunes previous versions when no other running notebook depends on that particular version.
 
+-------------
+Configuration
+-------------
+
+Before the stack is deployed, the .env file needs to be prepared. This can be achived by using the `defaults.env` file as a template for your specific environment.
+By default, the `defaults.env` environment file, expects that the `hub/setup_runtime_secrets.sh` file is sourced before the `jupyer_service` stack is deployed.
+In doing so, the `defaults.env` file will automatically load the defined environment variables from the session environment. E.g::
+
+    cp defaults.env .env
+    source hub/setup_runtime_secrets.sh
+
+Once this is complete, the stack is then ready to be launched.
+
 ---------------------
 Launching the Service
 ---------------------
