@@ -13,9 +13,9 @@ Architecture
 ------------
 
 The stack is made of a 2 layered docker swarm stack, i.e. any external
-request is received by the jupyterhub service which handles whether a user is allow to start a notebook.
+request is received by the jupyterhub proxy service, which redirects requests to the JupyterHub service where an authenticated user is allowed to start a notebook.
 
-This is defined by `Authenticators <https://jupyterhub.readthedocs.io/en/stable/
+The authentication is defined by `Authenticators <https://jupyterhub.readthedocs.io/en/stable/
 reference/authenticators.html>`_ where Jupyterhub allows for a custom
 authenticator to be selected based on the local requirements.
 Hence how a user should be authenticated before they are able to launch notebooks via the jupyterhub web interface.
@@ -60,7 +60,9 @@ Launching the Service
 To run a basic stack, simply execute the following command inside the repo
 directory::
 
+    # First we define the required environment variables
     source hub/setup_runtime_secrets.sh
+    # Schedule the swarm stack
     docker stack deploy --compose-file <(docker-compose config) jupyter-service
 
 

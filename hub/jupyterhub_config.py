@@ -1,8 +1,6 @@
 import os
 c = get_config()
 
-c.JupyterHub.spawner_class = 'jhub.SwarmSpawner'
-
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
 # IP as seen on the docker network. Can also be a hostname.
@@ -14,10 +12,11 @@ c.JupyterHub.port = 8000
 
 # Config required to seperate the proxy from JupyterHub
 c.JupyterHub.cleanup_servers = False
-
 c.ConfigurableHTTPProxy.should_start = False
-
 c.ConfigurableHTTPProxy.api_url = 'http://proxy:8001'
+
+# Which Spawner to use
+c.JupyterHub.spawner_class = 'jhub.SwarmSpawner'
 
 # First pulls can be really slow, so let's give it a big timeout
 c.SwarmSpawner.start_timeout = 60 * 15
@@ -61,13 +60,3 @@ c.JupyterHub.services = [
         'command': "python3 cull_idle_servers.py --timeout=7200".split(),
     },
 ]
-
-# Limit cpu/mem to 4 cores/8 GB mem
-# During conjestion, kill random internal processes to limit
-# available load to 1 core/ 2GB mem
-# c.SwarmSpawner.resource_spec = {
-#     'cpu_limit': int(8 * 1e9),
-#     'mem_limit': int(8192 * 1e6),
-#     'cpu_reservation': int(1 * 1e9),
-#     'mem_reservation': int(1024 * 1e6),
-# }
