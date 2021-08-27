@@ -38,7 +38,7 @@ c.SwarmSpawner.container_spec = {
 c.SwarmSpawner.use_user_options = True
 
 # Available docker images the user can spawn
-c.SwarmSpawner.dockerimages = [
+c.SwarmSpawner.images = [
     {'image': 'jupyter/base-notebook:latest',
      'name': 'Jupyter Notebook'
      }
