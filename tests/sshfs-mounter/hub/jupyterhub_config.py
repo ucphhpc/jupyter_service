@@ -18,7 +18,7 @@ notebook_dir = os.environ.get('NOTEBOOK_DIR') or '/home/jovyan/work/'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
 mounts = [{'type': 'volume',
-           'driver_config': 'nielsbohr/sshfs:latest',
+           'driver_config': 'ucphhpc/sshfs:latest',
            'driver_options': {'sshcmd': '{sshcmd}', 'id_rsa': '{id_rsa}',
                               'one_time': 'True',
                               'allow_other': '', 'big_writes': ''},
@@ -41,7 +41,7 @@ c.SwarmSpawner.use_user_options = True
 
 # Available docker images the user can spawn
 c.SwarmSpawner.dockerimages = [
-    {'image': 'nielsbohr/base-notebook:latest',
+    {'image': 'ucphhpc/base-notebook:latest',
      'name': 'Basic Notebook'}
 ]
 

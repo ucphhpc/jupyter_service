@@ -7,7 +7,7 @@ configs:
 
 services:
   jupyterhub:
-    image: nielsbohr/jupyterhub:latest
+    image: ucphhpc/jupyterhub:latest
     environment:
       TZ: Europe/Copenhagen
     configs:
@@ -30,7 +30,7 @@ services:
   ssh-mount-requester:
     depends_on:
       - "ssh-mount-dummy"
-    image: nielsbohr/jupyterhub-sshfs-mounter:latest
+    image: ucphhpc/jupyterhub-sshfs-mounter:latest
     volumes:
       - type: volume
         source: mountuser-home
@@ -45,7 +45,7 @@ services:
   ssh-mount-dummy:
     depends_on:
       - "nginx"
-    image: nielsbohr/ssh-mount-dummy
+    image: ucphhpc/ssh-mount-dummy
     ports:
       - "2222:22"
     volumes:

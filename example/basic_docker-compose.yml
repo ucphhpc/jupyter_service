@@ -7,7 +7,7 @@ configs:
 
 services:
   jupyterhub:
-    image: nielsbohr/jupyterhub:latest
+    image: ucphhpc/jupyterhub:latest
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -36,14 +36,14 @@ services:
         target: /srv/jupyterhub
     command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
   docker-image-updater:
-    image: nielsbohr/docker-image-updater
+    image: ucphhpc/docker-image-updater
     deploy:
       mode: global
     environment:
       TZ: Europe/Copenhagen
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: -update nielsbohr/base-notebook
+    command: -update ucphhpc/base-notebook
 
 volumes:
   jhubstate:

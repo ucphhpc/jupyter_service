@@ -17,7 +17,7 @@ services:
       configurable-http-proxy --default-target=http://jupyterhub:8000 --error-target=http://jupyterhub:8000/hub/error
 
   jupyterhub:
-    image: nielsbohr/jupyterhub:latest
+    image: ucphhpc/jupyterhub:latest
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -51,7 +51,7 @@ services:
     deploy:
       mode: global
     environment:
-      TZ: Europe/Copenhagen
+      TZ: ${TZ}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -60,10 +60,10 @@ services:
     deploy:
       mode: global
     environment:
-      TZ: Europe/Copenhagen
+      TZ: ${TZ}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: -update nielsbohr/base-notebook
+    command: -update ucphhpc/base-notebook
 
 volumes:
   jhubstate:

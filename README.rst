@@ -5,7 +5,7 @@ jupyter_service
 A jupyter notebook docker swarm setup that consists of a customised jupyterhub service that spawns individual notebooks for
 individual users.
 
-- `NBI Jupyterhub <https://github.com/nielsbohr/docker-nbi-jupyterhub.git>`_
+- `NBI Jupyterhub <https://github.com/ucphhpc/docker-nbi-jupyterhub.git>`_
 
 
 ------------

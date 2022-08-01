@@ -19,7 +19,7 @@ secrets:
 
 services:
   jupyterhub:
-    image: nielsbohr/jupyterhub:latest
+    image: ucphhpc/jupyterhub:latest
     deploy:
       placement:
         constraints: [node.role == manager]
