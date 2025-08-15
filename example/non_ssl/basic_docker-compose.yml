@@ -40,12 +40,9 @@ services:
         read_only: true
     command:
       configurable-http-proxy
-        --ssl-key=/etc/ssl/certs/jupyterhub/jupyterhub.key
-        --ssl-cert=/etc/ssl/certs/jupyterhub/jupyterhub.cert
-        --ssl-protocol=TLSv1_2
-        --port=443
-        --default-target=https://jupyterhub:443
-        --error-target=https://jupyterhub:443/hub/error
+        --port=8080
+        --default-target=https://jupyterhub:8080
+        --error-target=https://jupyterhub:8080/hub/error
         --log-level=INFO
 
   jupyterhub:
@@ -57,7 +54,7 @@ services:
       .env
     volumes:
         # The jupyterhub service needs accces to the docker daemon process
-        # to launch addtional notebook::4.3.6 services from within the service itself
+        # to launch other services/containers
       - /var/run/docker.sock:/var/run/docker.sock:rw
         # Keep the jhub states such as the db saved during restarts
       - type: volume
@@ -68,21 +65,7 @@ services:
         source: ./hub/jupyterhub
         target: /etc/jupyterhub
         read_only: true
-        # Mount the host side SSL key and certificate
-      - type: bind
-        source: ./ssl/certs/jupyterhub
-        target: /etc/ssl/certs/jupyterhub
-        read_only: true
     command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --log-level=INFO
-
-  docker-volume-monitor:
-    image: ucphhpc/docker-volume-monitor
-    deploy:
-      mode: global
-    environment:
-      TZ: ${TZ}
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 
   docker-image-updater:
     image: ucphhpc/docker-image-updater
@@ -112,6 +95,7 @@ services:
       - -protect jupyterhub/configurable-http-proxy:4.6.2
       - -prune
       - -prune-untagged
+
 
 volumes:
   jhubstate:

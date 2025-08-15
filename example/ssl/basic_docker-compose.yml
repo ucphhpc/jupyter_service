@@ -75,15 +75,6 @@ services:
         read_only: true
     command: jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --log-level=INFO
 
-  docker-volume-monitor:
-    image: ucphhpc/docker-volume-monitor
-    deploy:
-      mode: global
-    environment:
-      TZ: ${TZ}
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
   docker-image-updater:
     image: ucphhpc/docker-image-updater
     deploy:
@@ -112,6 +103,8 @@ services:
       - -protect jupyterhub/configurable-http-proxy:4.6.2
       - -prune
       - -prune-untagged
+
+
 
 volumes:
   jhubstate:

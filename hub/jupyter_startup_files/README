@@ -1,0 +1,10 @@
+This directory is designated for scripts that are supposed to be copied by
+`create_ipython_profile_start.py` into the default IPython profile startup directory.
+
+When adding a script here, it should either be added to the swarm stack by
+creating a specific docker-compose config entry for it and subsequently add it
+to the global `c.SwarmSpawner.configs` option in the JupyterHub configuration file.
+The configs will then be globally available on each node in the swarm cluster.
+
+The other option is to bind mount the scripts, but this requires an external
+distribution strategy because Docker Swarm doesn't implement this for bind or regular volumes.

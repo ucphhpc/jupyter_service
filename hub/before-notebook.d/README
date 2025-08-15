@@ -1,0 +1,6 @@
+This directory contains the scripts that will be executed inside the spawned container
+right before the jupyter lab application is launched. This feature is provided by the jupyter/base-notebook
+image's start.sh script.
+
+An individual script can be mounted either as a bind or config mount into the
+containers /usr/local/bin/before-notebook.d directory.
