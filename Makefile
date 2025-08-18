@@ -6,6 +6,7 @@ NETWORK_EXISTS=$(shell docker network inspect $(NETWORK_NAME) > /dev/null 2>&1 &
 SSL_MOUNT_DIRECTORY_PATH=./ssl/certs/jupyterhub
 USE_JUPYTERHUB_CONFIG_PATH=./example/non_ssl/basic_jupyterhub_config.py
 USE_DOCKER_COMPOSE_PATH=./example/non_ssl/basic_docker-compose.yml
+JUPYTERHUB_VOLUME_NAME=jupyterhub_state
 ARGS=
 
 # NOTE: dynamic lookup with docker as default
@@ -57,16 +58,20 @@ ifeq (,$(wildcard ${SSL_MOUNT_DIRECTORY_PATH}))
 	@mkdir -p ${SSL_MOUNT_DIRECTORY_PATH}
 endif
 
+.PHONY: dockervolumeclean
+dockervolumeclean:
+	${DOCKER} volume rm -f ${JUPYTERHUB_VOLUME_NAME}
+
 .PHONY: clean
 clean:
 	@rm -fr docker-compose.yml
 	@rm -fr hub/jupyterhub/jupyterhub_config.py
 	@rm -fr .env
 
-.PHONY:	distclean
+.PHONY:	distclean dockervolumeclean
 distclean:
 	@rm -fr venv
-	@defaults.env
+	@rm -fr defaults.env
 
 .PHONY: daemon
 daemon:

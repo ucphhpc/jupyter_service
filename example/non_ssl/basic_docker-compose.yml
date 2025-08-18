@@ -53,7 +53,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:rw
         # Keep the jhub states such as the db saved during restarts
       - type: volume
-        source: jhubstate
+        source: jupyterhub_state
         target: /srv/jupyterhub
         # Load the jupyterhub config from /etc/jupyterhub
       - type: bind
@@ -90,7 +90,7 @@ services:
 
 
 volumes:
-  jhubstate:
+  jupyterhub_state:
     external: true
 
 networks:
