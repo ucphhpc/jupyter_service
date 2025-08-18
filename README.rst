@@ -62,7 +62,8 @@ By default, the Makefile will select the non-SSL configuration in the ``example/
 
     make init
 
-Once this is complete, the stack is then ready to be launched. By default the non-SSL version is configured to publish the JupyterHub service on port 8080.
+Once this is complete, the stack is then ready to be launched. By default the non-SSL version is configured to publish the JupyterHub service on port 8080
+that is configured with an **insecure default password ``dummy`` that should not be used in a production environment**.
 
 An alternative to this is to setup the ``docker-compose.yml`` and ``hub/jupyterhub/jupyterhub_config.py`` files yourself before launching the stack.
 
