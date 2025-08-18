@@ -57,19 +57,20 @@ and if so pulls it to every swarm node and prunes previous versions when no othe
 Configuration
 -------------
 
-Before the stack is deployed, the .env file needs to be prepared. This can be achived by using the ``make init`` target to generate the nessesary environment for your deployment.
-By default, the `defaults.env` environment file will be produced and linked by the `.env` file that is used by the `jupyter_service` once deployed::
+Before the stack can be deployed, the ``docker-compose.yml``, ``jupyterhub_config.py``, and ``.env`` files needs to be prepared. This can be achived by using the ``make init`` target to generate the nessesary environment for your deployment.
+By default, the Makefile will select the non-SSL configuration in the ``example/non_ssl`` directory, and the `defaults.env` environment file will be produced and linked by the `.env` file::
 
     make init
 
-Once this is complete, the stack is then ready to be launched.
+Once this is complete, the stack is then ready to be launched. By default the non-SSL version is configured to publish the JupyterHub service on port 8080.
+
+An alternative to this is to setup the ``docker-compose.yml`` and ``hub/jupyterhub/jupyterhub_config.py`` files yourself before launching the stack.
 
 ---------------------
 Launching the Service
 ---------------------
 
-To run a basic stack, simply execute the following command inside the repo
-directory::
+Once the Configuration has been completed, the service can be launched by executing the following command inside the repository directory::
 
     make daemon
 
