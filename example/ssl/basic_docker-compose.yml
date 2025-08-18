@@ -79,9 +79,6 @@ services:
     image: ucphhpc/docker-image-updater
     deploy:
       mode: global
-      placement:
-          constraints:
-            - "node.labels.type==cpu"
     environment:
       TZ: ${TZ}
     volumes:

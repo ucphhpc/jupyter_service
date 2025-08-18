@@ -4,6 +4,8 @@ NETWORK_NAME=$(SERVICE_NAME)_default
 NETWORK_RANGE=10.50.0.0/16
 NETWORK_EXISTS=$(shell docker network inspect $(NETWORK_NAME) > /dev/null 2>&1 && echo 0 || echo 1)
 SSL_MOUNT_DIRECTORY_PATH=./ssl/certs/jupyterhub
+USE_JUPYTERHUB_CONFIG_PATH=./example/non_ssl/basic_jupyterhub_config.py
+USE_DOCKER_COMPOSE_PATH=./example/non_ssl/basic_docker-compose.yml
 ARGS=
 
 # NOTE: dynamic lookup with docker as default
@@ -26,6 +28,17 @@ ifeq ($(NETWORK_EXISTS), 1)
 	@echo Creating Docker Swarm network: $(NETWORK_NAME)
 	./init/init-swarm-network.sh $(NETWORK_NAME) $(NETWORK_RANGE)
 endif
+ifeq (,$(wildcard ./hub/jupyterhub/jupyterhub_config.py))
+	@echo No jupyterhub configuration file detected
+	@echo Defaulting to the non-SSL version inside ${USE_JUPYTERHUB_CONFIG_PATH}
+	@cp ${USE_JUPYTERHUB_CONFIG_PATH} hub/jupyterhub/jupyterhub_config.py
+endif
+ifeq (,$(wildcard ./docker-compose.yml))
+# Geneate and pass secret environment variables to environment file
+	@echo No docker-compose.yml file detected
+	@echo Defaulting to the non-SSL version inside ${USE_DOCKER_COMPOSE_PATH}
+	@ln -s ${USE_DOCKER_COMPOSE_PATH} docker-compose.yml
+endif
 ifeq (,$(wildcard ./defaults.env))
 	@echo No defaults.env file detected
 	@echo Generating a default environment setup
@@ -43,6 +56,11 @@ ifeq (,$(wildcard ${SSL_MOUNT_DIRECTORY_PATH}))
 	@echo Creating missing path: ${SSL_MOUNT_DIRECTORY_PATH} for mounting host SSL files
 	@mkdir -p ${SSL_MOUNT_DIRECTORY_PATH}
 endif
+
+.PHONY: clean
+clean:
+	@rm -fr docker-compose.yml
+	@rm -fr hub/jupyterhub/jupyterhub_config.py
 
 .PHONY: daemon
 daemon:

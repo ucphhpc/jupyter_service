@@ -210,81 +210,64 @@ c.SwarmSpawner.container_spec = {
 # user_options has to be enabled
 c.SwarmSpawner.use_user_options = True
 
-worker_nodes = {
-    "constraints": [
-        "node.role == worker",
-    ]
-}
-
 # Available docker images the user can spawn
 c.SwarmSpawner.images = [
     {
         "image": "ucphhpc/datascience-notebook:4.3.6",
         "name": "Datascience Notebook with Python",
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/statistics-notebook:4.3.6",
         "name": "Statistics Notebook with Python",
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/r-notebook:4.3.6",
         "name": "R Notebook with R-Studio",
         "env": r_env,
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/gpu-notebook:4.3.6",
         "name": "AI Notebook",
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/chemistry-notebook:4.2.4",
         "name": "Chemistry Notebook with Diffpy",
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/geo-notebook:4.3.6",
         "name": "Geo Notebook",
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/bio-notebook:4.3.6",
         "name": "Bio Notebook",
         "env": r_env,
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/julia-notebook:4.3.6",
         "name": "Julia Notebook",
         "env": julia_env,
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/cern-notebook:4.3.6",
         "name": "CERN Notebook",
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/fenics-notebook:4.2.6",
         "name": "Finite Element Notebook with FEniCS",
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/ocean-notebook:4.3.6",
         "name": "Ocean Notebook",
-        "placement": worker_nodes,
     },
     {
         "image": "ucphhpc/qsharp-notebook:4.3.6",
         "name": "Q# Notebook",
-        "placement": worker_nodes,
     },
 ]
 
 # Authenticator
 c.JupyterHub.authenticator_class = "jhubauthenticators.DummyAuthenticator"
+c.DummyAuthenticator.password = "dummy"
 
 # Service that checks for inactive notebooks
 c.JupyterHub.services = [
