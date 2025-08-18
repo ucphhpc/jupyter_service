@@ -61,6 +61,12 @@ endif
 clean:
 	@rm -fr docker-compose.yml
 	@rm -fr hub/jupyterhub/jupyterhub_config.py
+	@rm -fr .env
+
+.PHONY:	distclean
+distclean:
+	@rm -fr venv
+	@defaults.env
 
 .PHONY: daemon
 daemon:
