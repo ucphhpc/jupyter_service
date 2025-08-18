@@ -7,7 +7,6 @@ individual users.
 
 - `UCPHHPC Jupyterhub <https://github.com/ucphhpc/docker-JupyterHub.git>`_
 
-
 ------------
 Architecture
 ------------
@@ -33,7 +32,7 @@ cluster whenever a user requests a new notebook.
 Prerequisites
 -------------
 
-Before the JupyterHub service is able to launch separate notebook services,
+As a prerequisite the JupyterHub service is able to launch separate notebook services,
 JupyterHub needs access to the hosts docker daemon process. This access can
 be gained in a number of ways, one of which is to mount the ``/var/run/docker
 .sock`` file inside the JupyterHub service as a volume and then ensuring that
@@ -49,7 +48,7 @@ In addition it requires that the JupyterHub service is deployed on a swarm manag
 See `Create a swarm <https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm>`_.
 Hence the restriction set in the docker-compose file that the JupyterHub service is restricted to a manager node.
 
-By default the ``example/basic_docker-compose.yml`` stack also provides an `docker-image-updater <https://github.com/ucphhpc/docker-image-updater>`_ service.
+Upon launching the ``example/basic_docker-compose.yml`` stack also provides an `docker-image-updater <https://github.com/ucphhpc/docker-image-updater>`_ service.
 This service provides a continuously monitor whether new versions of the specified notebook image is available,
 and if so pulls it to every swarm node and prunes previous versions when no other running notebook depends on that particular version.
 
@@ -58,14 +57,23 @@ Configuration
 -------------
 
 Before the stack can be deployed, the ``docker-compose.yml``, ``jupyterhub_config.py``, and ``.env`` files needs to be prepared. This can be achived by using the ``make init`` target to generate the nessesary environment for your deployment.
-By default, the Makefile will select the non-SSL configuration in the ``example/non_ssl`` directory, and the `defaults.env` environment file will be produced and linked by the `.env` file::
+By default, the Makefile will select the non-SSL configuration in the ``example/non_ssl`` directory, and the `defaults.env` environment file will be produced and linked by the `.env` file.
+
+This non-SSL version is configured to publish the JupyterHub service on port 8080. Furthermore, the example JupyterHub configuration file examples in 
+`example/*` uses an **insecure default password ``dummy`` that should not be used in a production environment**. This can be changed by altering the
+following option in the default ``example/non_ssl/basic_jupyterhub_config.py`` file before it is copied into the ``hub/jupyterhub`` directory before calling the ``make init`` target.::
+
+    # Authenticator
+    c.JupyterHub.authenticator_class = "jhubauthenticators.DummyAuthenticator"
+    c.DummyAuthenticator.password = "dummy"
+
+Once the selected ``jupyterhub_config.py`` file has been properly prepared, the configuration can be prepared by calling::
 
     make init
 
-Once this is complete, the stack is then ready to be launched. By default the non-SSL version is configured to publish the JupyterHub service on port 8080
-that is configured with an **insecure default password ``dummy`` that should not be used in a production environment**.
-
 An alternative to this is to setup the ``docker-compose.yml`` and ``hub/jupyterhub/jupyterhub_config.py`` files yourself before launching the stack.
+
+Finally, ``make clean`` can be called if you want to remove the various configuration and environment files that have been prepared by the ``init`` call.
 
 ---------------------
 Launching the Service
