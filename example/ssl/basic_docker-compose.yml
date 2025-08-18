@@ -101,8 +101,6 @@ services:
       - -prune
       - -prune-untagged
 
-
-
 volumes:
   jupyterhub_state:
     external: true
