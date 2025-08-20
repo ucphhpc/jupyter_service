@@ -32,6 +32,7 @@ endif
 ifeq (,$(wildcard ./hub/jupyterhub/jupyterhub_config.py))
 	@echo No jupyterhub configuration file detected
 	@echo Defaulting to the non-SSL version inside ${USE_JUPYTERHUB_CONFIG_PATH}
+	@mkdir -p hub/jupyterhub
 	@cp ${USE_JUPYTERHUB_CONFIG_PATH} hub/jupyterhub/jupyterhub_config.py
 endif
 ifeq (,$(wildcard ./docker-compose.yml))
