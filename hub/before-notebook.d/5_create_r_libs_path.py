@@ -2,7 +2,6 @@
 import os
 
 # Set custom Rprofile configuration path
-
 env_name = "R_LIBS_USER"
 r_libs_user = os.environ.get(env_name, None)
 

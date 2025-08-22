@@ -23,7 +23,8 @@ def makedirs(path):
 def write(path, content, mode="w", mkdirs=False):
     dir_path = os.path.dirname(path)
     if not exists(dir_path) and mkdirs:
-        if not makedirs(dir_path):
+        created, message = makedirs(dir_path)
+        if not created:
             return False
     try:
         with open(path, mode) as fh:

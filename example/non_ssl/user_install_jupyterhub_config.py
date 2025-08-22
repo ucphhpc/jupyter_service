@@ -1,11 +1,8 @@
 # DAG config
-import ast
 import sys
 import os
 from docker.types import Healthcheck
-from textwrap import dedent
 from jhub import SwarmSpawner
-from traitlets import Unicode, default
 
 SERVICE_NAME = "jupyter-service"
 JOVYAN_UID = "1000"
@@ -13,66 +10,7 @@ JOVYAN_GID = "100"
 
 c = get_config()
 
-
-class UserSelectionSpawner(SwarmSpawner):
-
-    form_template = Unicode(
-        """
-        <label for="select_image">Select a notebook image:</label>
-        <select class="form-control" name="select_image" required autofocus>
-            {option_template}
-        </select>
-        <div class="form-group">
-            <label for="package-file">Upload Package File (requirements.txt or environment.yml)</label>
-            <input type="file" name="package-file" id="package-file" class="form-control"/>
-        </div>
-        """,
-        help=dedent(
-            """
-            Form template.
-        """
-        ),
-    ).tag(config=True)
-
-    option_template = """<option value="{value}">{name}</option>"""
-
-    @default("options_form")
-    def _options_form(self):
-        """Return the form with the drop-down menu."""
-        # User options not enabled -> return default jupyterhub form
-        if not self.use_user_options:
-            return ""
-        template_options = []
-        for di in self.images:
-            value = dict(image=di["image"], name=di["name"])
-            template_value = dict(name=di["name"], value=value)
-            template_options.append(self.option_template.format(**template_value))
-        option_template = "".join(template_options)
-        return self.form_template.format(option_template=option_template)
-
-    def options_from_form(self, form_data):
-        """Parse the submitted form data and turn it into the correct
-        structures for self.user_options."""
-        # user options not enabled, just return input
-        if not self.use_user_options:
-            return form_data
-
-        # Check for uploaded file
-        user_uploaded_file = form_data.get("package-file", None)
-        if user_uploaded_file:
-            self.log.info(
-                "User: {} uploaded file: {}".format(self.user.name, user_uploaded_file)
-            )
-        # TODO, validate the input of the file
-
-        # Don't allow users to input their own images
-        options = {
-            "user_install_file": user_uploaded_file,
-        }
-        return options
-
-
-c.JupyterHub.spawner_class = UserSelectionSpawner
+c.JupyterHub.spawner_class = SwarmSpawner
 c.JupyterHub.ip = "0.0.0.0"
 c.JupyterHub.port = 8080
 
@@ -86,6 +24,11 @@ c.JupyterHub.cleanup_proxy = False
 c.JupyterHub.cleanup_servers = False
 c.ConfigurableHTTPProxy.should_start = False
 c.ConfigurableHTTPProxy.api_url = "http://proxy:8081"
+
+# Place where the cookie secret file should be written.
+c.JupyterHub.cookie_secret_file = os.path.join(
+    os.sep, "srv", "jupyterhub", "jupyterhub_cookie_secret"
+)
 
 # number of allowed servers, 0 means unlimited
 c.JupyterHub.active_server_limit = 0
