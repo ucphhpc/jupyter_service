@@ -15,6 +15,8 @@ configs:
     file: ./hub/before-notebook.d/7_set_python_pip_aliases.py
   8_welcome_message_config:
     file: ./hub/before-notebook.d/8_welcome_message.py
+  9_install_user_packages_config:
+    file: ./hub/before-notebook.d/9_install_user_packages.sh
   update_path_env_config:
     file: ./hub/jupyter_startup_files/update_path_env.py
   r_environ_config:
