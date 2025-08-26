@@ -114,3 +114,6 @@ defaults.env
 # if none are selected by the user
 docker-compose.yml
 hub/jupyterhub/jupyterhub_config.py
+
+# Ignore custom yaml files
+*.yml
