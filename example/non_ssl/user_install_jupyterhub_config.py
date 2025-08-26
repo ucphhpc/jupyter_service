@@ -170,6 +170,7 @@ general_env = {
     "NB_GID": JOVYAN_GID,
     "IPYTHON_STARTUP_DIR": jupyter_startup_files_path,
     "JUPYTER_KERNEL_PYTHON3_PYTHONUSERBASE": root_dir["work"]["python3"],
+    "USER_INSTALL_PYTHONUSERBASE": root_dir["work"]["python3"],
     "DEFAULT_CONDA_ENVIRONMENT": "python3",
     "HISTFILE": "{}/.bash_history".format(root_dir["work"]["path"]),
 }
